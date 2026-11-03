@@ -66,6 +66,8 @@
   .camera img{display:block;width:100%;height:100%;pointer-events:none;user-select:none}
   .camera.snap{transform:scale(.985)}
   .stage.tidied .camera{opacity:0}
+  .emblem{position:absolute;right:clamp(16px,2vw,28px);top:clamp(16px,2.6vh,28px);width:25vw;max-height:calc(100% - 140px);z-index:12;pointer-events:none}
+  .emblem img{display:block;width:100%;height:auto;max-height:inherit;object-fit:contain;object-position:right top;user-select:none}
 
   .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:300}
   .flash.pop{animation:flashpop .55s ease-out}
@@ -169,7 +171,8 @@
 
   /* ---------- mobile ---------- */
   @media (max-width: 820px){
-    .intro{left:14px;right:14px;top:14px;width:auto}
+    .intro{left:14px;right:calc(14px + 22vw + 10px);top:14px;width:auto}
+    .emblem{right:14px;top:14px;width:22vw}
     .intro .logo{width:170px}
     .intro dl{margin-top:10px}
     .intro .row{padding:6px 0 7px}
@@ -218,6 +221,11 @@
       <div class="row"><dt>Type</dt><dd id="cap-meta"></dd></div>
       <div class="row"><dt>About</dt><dd id="cap-desc"></dd></div>
     </dl>
+
+    <picture class="emblem" aria-hidden="true">
+      <source srcset="assets/logo.webp" media="(prefers-reduced-motion: reduce)">
+      <img src="assets/logo-anim.webp" alt="" draggable="false">
+    </picture>
 
     <div class="camera" id="camera" aria-hidden="true"><img src="assets/camera.webp" alt="" draggable="false"></div>
 
@@ -361,7 +369,7 @@ const PROJECTS = [
   function rand(seed){ return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
   const narrow = () => stage.clientWidth < 600;
   // open spots on the desk (fractions of the stage), clear of the header, camera and center print
-  const SLOTS = [[.71,.21],[.88,.25],[.74,.53],[.9,.57],[.84,.82],[.64,.8],[.45,.83],[.16,.57],[.31,.64],[.53,.6]];
+  const SLOTS = [[.88,.8],[.73,.78],[.58,.82],[.43,.78],[.28,.82],[.64,.62],[.38,.62],[.14,.8],[.51,.7],[.18,.62]];
   function scatter(seed = 7){
     const R = rand(seed);
     if (narrow()){
@@ -383,7 +391,8 @@ const PROJECTS = [
   }
   function tidy(){
     const W = stage.clientWidth, H = stage.clientHeight;
-    const L = narrow() ? 0 : intro.offsetLeft + intro.offsetWidth + 10, avail = W - L - 20;
+    const em = document.querySelector('.emblem');
+    const L = narrow() ? 0 : intro.offsetLeft + intro.offsetWidth + 10, avail = (narrow() ? W : em.offsetLeft - 10) - L - 20;
     const top = narrow() ? H * .36 : 0, availH = H - top - 90;
     // pick the column count whose grid fits largest, shrinking prints only if needed
     let best = null;
