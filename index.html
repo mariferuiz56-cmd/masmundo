@@ -459,7 +459,7 @@ const PROJECTS = [
   reel.style.height = `calc(${(INTRO + N*SEG + OUTRO) * 100}svh)`;
 
   const mInfo = $('m-info');
-  mInfo.innerHTML = '<img class="m-emblem" src="assets/logo-anim.webp" alt="" loading="lazy">' + intro.outerHTML.replace(/ id="(about|more)"/g, '') + document.querySelector('.stage > .buy').outerHTML;
+  mInfo.innerHTML = intro.outerHTML.replace(/ id="(about|more)"/g, '') + document.querySelector('.stage > .buy').outerHTML;
 
   $('more').addEventListener('click', () => { const a = $('about'); a.classList.toggle('open'); $('more').textContent = a.classList.contains('open') ? 'Show less' : 'Read more'; render(); });
 
