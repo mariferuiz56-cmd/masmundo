@@ -104,8 +104,9 @@
   .certs li b{font-weight:600}
   .certs li span{color:var(--ink-soft)}
   .certs li time{font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
-  .langs{min-width:150px}
+  .langs{min-width:180px}
   .langs ul{list-style:none;margin:0;padding:0}
+  .langs[open] ul{animation:drop .3s ease}
   .langs li{display:flex;align-items:center;gap:10px;border-top:1px solid rgba(35,20,25,.18);padding:8px 0 9px;font-size:13px;font-weight:500}
   .flag{width:22px;height:15px;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(35,20,25,.15);overflow:hidden;flex:none}
   .hint{margin-top:12px;font-size:12px;color:var(--ink-soft);text-align:center}
@@ -157,13 +158,13 @@
           <li><b>Freelance Writing: How to Get Published in Print and Online</b><time>Feb 2019</time><span>City, University of London</span></li>
         </ul>
       </details>
-      <div class="langs">
-        <h3>Languages</h3>
+      <details class="certs langs">
+        <summary><h3>Languages <span class="cnt">2</span></h3></summary>
         <ul>
           <li><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="7" height="14" fill="#1E7A46"/><rect x="7" width="7" height="14" fill="#fff"/><rect x="14" width="7" height="14" fill="#CE2B37"/><circle cx="10.5" cy="7" r="1.6" fill="#8A5A2B"/></svg>Spanish</li>
           <li><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#fff"/><g fill="#C8233A"><rect y="0" width="21" height="2"/><rect y="4" width="21" height="2"/><rect y="8" width="21" height="2"/><rect y="12" width="21" height="2"/></g><rect width="9" height="8" fill="#2A3A75"/></svg>English</li>
         </ul>
-      </div>
+      </details>
     </section>
     <p class="hint">Use the arrow keys or drag across the line to travel through time.</p>
   </div>
