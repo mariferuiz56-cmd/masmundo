@@ -587,7 +587,7 @@ const PROJECTS = [
       el.style.zIndex = fly <= 0 ? 15 : (landed ? pr.z : 80 + i);
     });
 
-    if (fire && !reduce){
+    if (false && fire && !reduce){
       burst.style.left = slotX + 'px'; burst.style.top = (slotY - camH * .18) + 'px';
       burst.style.setProperty('--bw', Math.max(W, H) * .9 + 'px');
       for (const f of [flash, burst]){ f.classList.remove('pop'); void f.offsetWidth; f.classList.add('pop'); }
