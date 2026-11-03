@@ -273,11 +273,11 @@
    ========================================================= */
 const PROJECTS = [
   { title:"Easy Love by Isadora", label:"Easy Love", kind:"Music artwork", year:"",
-    img:"work/easy-love/cover.webp",
+    img:"work/easy-love/cover.webp", thumb:"work/easy-love/thumb.webp",
     images:["work/easy-love/mangoes.webp","work/easy-love/portraits.webp"], colors:["#2E6BC6","#C9B23C","#F28A2E"],
     desc:"Creative direction and cover art for Isadora's debut single, Easy Love. The goal was a visual identity as soft, nostalgic and timeless as the song itself." },
   { title:"Part of the Process for Jones Road", label:"Part of the Process", kind:"Beauty campaign, AI art direction", year:"",
-    img:"work/jones-road/books.webp", ratio:"4/5",
+    img:"work/jones-road/books.webp", thumb:"work/jones-road/thumb.webp", ratio:"4/5",
     images:["work/jones-road/bag.webp","work/jones-road/coffee.webp","work/jones-road/toast.webp","work/jones-road/compact.webp","work/jones-road/notebook.webp","work/jones-road/bun.webp"],
     colors:["#F3C7CD","#9FB8AE","#231419"],
     roles:"Creative Direction · AI Art Direction · Campaign Development · Product Storytelling · Visual Concepting",
@@ -285,7 +285,7 @@ const PROJECTS = [
     long:["<em>Part of the Process</em> challenges the idea that beauty asks women to pause their lives to get ready. Instead, Jones Road becomes part of her momentum: applied between meetings, in transit, while working, creating or moving through her day.",
           "The visual direction captures these candid, in-between moments with an intimate editorial feel, positioning beauty not as a separate ritual but as something that already lives within her day. She isn't getting ready. She's already in motion."] },
   { title:"Summer in Gaia for Cult Gaia", label:"Summer in Gaia", kind:"Fashion campaign, AI art direction", year:"",
-    img:"work/cult-gaia/trio.webp", ratio:"4/5", fit:"contain",
+    img:"work/cult-gaia/trio.webp", thumb:"work/cult-gaia/thumb.webp", ratio:"4/5", fit:"contain",
     images:["work/cult-gaia/market.webp","work/cult-gaia/stall.webp","work/cult-gaia/wall.webp","work/cult-gaia/red.webp","work/cult-gaia/back.webp","work/cult-gaia/vhs.webp","work/cult-gaia/above.webp","work/cult-gaia/grid.webp"],
     colors:["#F2B705","#E2401C","#1E9E5A"],
     roles:"Creative Direction · AI Art Direction · Campaign Development · Visual Storytelling · World-Building",
@@ -293,7 +293,7 @@ const PROJECTS = [
     long:["<em>Summer in Gaia</em> is a surreal campaign documenting an imagined island where nature, architecture and human life exist in harmony.",
           "The visual direction draws from vintage travel photography and archival tourism imagery, so each scene feels like a photograph taken by visitors discovering the island decades ago. AI was used to build and art direct this fictional world while keeping a consistent photographic language, a nostalgic film quality and a strong sense of place. The result blurs the line between travel documentation and imagined reality."] },
   { title:"Hemp campaign for RAS", label:"RAS", kind:"Fashion campaign, creative direction", year:"",
-    img:"work/ras/leaf.webp", ratio:"2/3",
+    img:"work/ras/leaf.webp", thumb:"work/ras/thumb.webp", ratio:"2/3",
     images:["work/ras/basket.webp","work/ras/beanie.webp","work/ras/stripes.webp","work/ras/sky.webp","work/ras/river.webp","work/ras/fiber.webp","work/ras/coconut.webp","work/ras/canopy.webp","work/ras/pair.webp"],
     colors:["#C9C93A","#2F5D2A","#D2462C"],
     roles:"Creative Direction · AI Art Direction · Campaign Concept · Visual Storytelling",
@@ -370,11 +370,20 @@ const PROJECTS = [
     });
   }
   function tidy(){
-    const W = stage.clientWidth, H = stage.clientHeight, pw = printW(), ph = pw * 86/72;
-    const gx = pw * 1.12, gy = ph * 1.08;
+    const W = stage.clientWidth, H = stage.clientHeight;
     const L = narrow() ? 0 : intro.offsetLeft + intro.offsetWidth + 10, avail = W - L - 20;
-    const cols = Math.max(2, Math.min(N, Math.floor(avail / gx))), rows = Math.ceil(N / cols);
-    const top = narrow() ? H * .36 : 0;
+    const top = narrow() ? H * .36 : 0, availH = H - top - 90;
+    // pick the column count whose grid fits largest, shrinking prints only if needed
+    let best = null;
+    for (let c = 2; c <= N; c++){
+      const r = Math.ceil(N / c), base = printW();
+      const k = Math.min(1, avail / (c * base * 1.12), availH / (r * base * 86/72 * 1.08));
+      if (!best || k > best.k) best = { c, k };
+    }
+    tidyK = best.k;
+    const pw = printW() * tidyK, ph = pw * 86/72;
+    const gx = pw * 1.12, gy = ph * 1.08;
+    const cols = best.c, rows = Math.ceil(N / cols);
     const oy = Math.max(top + ph/2 + 20, top + (H - top - (rows - 1) * gy) / 2);
     prints.forEach((pr, i) => {
       const c = i % cols, r = Math.floor(i / cols), inRow = Math.min(cols, N - r * cols), rx = L + (avail - (inRow - 1) * gx) / 2 + 10;
@@ -387,9 +396,9 @@ const PROJECTS = [
   const lerp = (a, b, t) => a + (b - a) * t;
   const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
   const easeOut = t => 1 - Math.pow(1 - t, 3);
-  const printW = () => { const W = stage.clientWidth; return W < 600 ? Math.min(W * .27, 130) : Math.min(Math.max(W * .12, 130), 205); };
+  const printW = () => { const W = stage.clientWidth; return W < 600 ? Math.min(W * .35, 170) : Math.min(Math.max(W * .156, 170), 266); };
 
-  let active = -2, zTop = 100;
+  let active = -2, zTop = 100, tidyK = 1;
 
   function render(){
     const H = stage.clientHeight, W = stage.clientWidth;
@@ -431,7 +440,7 @@ const PROJECTS = [
       const mxm = pw * .5 + 8, mym = ph * .5 + 8;
       const tx = clamp(pr.x * W, mxm, W - mxm), ty = clamp(pr.y * H, mym, H - mym);
       const cx = lerp(slotX, tx, fly), cy = lerp(ejCy, ty, fly) - Math.sin(fly * Math.PI) * 50;
-      const s = lerp(ejectS, 1, fly);
+      const s = lerp(ejectS, stage.classList.contains('tidied') ? tidyK : 1, fly);
       const rot = lerp((i % 2 ? .8 : -.8) * eject, pr.r, fly);
       el.style.transform = `translate(${cx - pw/2}px, ${cy - ph/2}px) rotate(${rot}deg) scale(${s})`;
 
