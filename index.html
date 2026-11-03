@@ -139,42 +139,14 @@
 
 
 
-  /* ---------- envelope intro ---------- */
+  /* ---------- loader ---------- */
   .env-intro{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#fff;
-             transition:opacity .7s ease .1s, visibility 0s linear .8s}
+             transition:opacity .8s ease, visibility 0s linear .8s}
   .env-intro.gone{opacity:0;visibility:hidden;pointer-events:none}
   html.no-intro .env-intro{display:none}
   body.intro-on{overflow:hidden}
-  .env{--w:min(440px,78vw);position:relative;width:var(--w);aspect-ratio:1.5;perspective:1400px;
-       filter:drop-shadow(0 30px 40px rgba(120,30,70,.22)) drop-shadow(0 4px 8px rgba(120,30,70,.15));
-       transition:transform .9s cubic-bezier(.6,0,.2,1), opacity .6s ease}
-  .env-intro.zoom .env{transform:translateY(18vh) scale(1.6);opacity:0}
-  .env .back{position:absolute;inset:0;background:#E9469C;border-radius:6px}
-  .env .letter{position:absolute;left:6%;right:6%;top:6%;height:88%;background:#FFFEFB;border-radius:3px;z-index:2;
-               display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.12);
-               transition:transform .9s cubic-bezier(.3,.7,.2,1)}
-  .env .letter{overflow:hidden}
-  .env .letter img{position:absolute;inset:8% 0;margin:auto;height:84%;width:auto;max-width:90%;object-fit:contain;display:block}
-  .env.open .letter{transform:translateY(-62%)}
-  .env .front{position:absolute;inset:0;z-index:3;border-radius:6px;overflow:hidden;
-              background:
-                linear-gradient(to top right, transparent calc(50% - 1px), rgba(0,0,0,.06) 50%, transparent calc(50% + 1px)) left bottom/50% 100% no-repeat,
-                linear-gradient(to top left, transparent calc(50% - 1px), rgba(0,0,0,.06) 50%, transparent calc(50% + 1px)) right bottom/50% 100% no-repeat;
-              clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
-  .env .front::before{content:"";position:absolute;inset:0;background:#ED55A6;z-index:-1}
-  .env .front .wm{position:absolute;left:50%;bottom:16%;transform:translateX(-50%);width:52%;aspect-ratio:480/71;background:#fff;
-                  -webkit-mask:url(assets/wordmark.png) center/contain no-repeat;mask:url(assets/wordmark.png) center/contain no-repeat}
-  .env .flap{position:absolute;left:0;right:0;top:0;height:60%;z-index:4;transform-origin:50% 0;
-             transition:transform .7s cubic-bezier(.5,0,.3,1), z-index 0s linear .35s}
-  .env .flap::before{content:"";position:absolute;inset:0;background:#F06AB2;clip-path:polygon(0 0,100% 0,50% 100%);border-radius:6px 6px 0 0}
-  .env .flap .seal{position:absolute;left:50%;top:100%;width:15%;aspect-ratio:1;transform:translate(-50%,-62%);border-radius:50%;
-             background:radial-gradient(circle at 35% 30%,#dde65a,#CBD537 55%,#a9b326);box-shadow:0 2px 4px rgba(0,0,0,.2), inset 0 0 0 3px rgba(255,255,255,.18);
-             display:grid;place-items:center;color:#5d6410;font:700 clamp(12px,2.6vw,20px)/1 "Instrument Sans",sans-serif;transition:opacity .25s}
-  .env.open .flap{transform:rotateX(180deg);z-index:1}
-  .env.open .flap .seal{opacity:0}
-  .env-intro .tap{position:absolute;bottom:9vh;left:50%;transform:translateX(-50%);font:500 13px/1 "Instrument Sans",sans-serif;
-                  letter-spacing:.16em;text-transform:uppercase;color:#6B5560;transition:opacity .3s}
-  .env.open ~ .tap{opacity:0}
+  .env-intro img{width:min(200px,42vw);height:auto;display:block;animation:loadin .6s ease both}
+  @keyframes loadin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 
   /* ---------- lightbox ---------- */
   .box{position:fixed;inset:0;z-index:400;display:none;place-items:center;background:rgba(35,20,25,.55);padding:24px}
@@ -236,36 +208,26 @@
 </style>
 </head>
 <body>
-<div class="env-intro" id="env-intro" role="button" tabindex="0" aria-label="Open">
-  <div class="env" id="env">
-    <div class="back"></div>
-    <div class="letter"><img src="assets/logo.webp" alt=""></div>
-    <div class="front"><i class="wm"></i></div>
-    <div class="flap"><span class="seal">+</span></div>
-  </div>
-  <span class="tap">opening…</span>
+<div class="env-intro" id="env-intro" aria-hidden="true">
+  <img src="assets/logo-anim.webp" alt="">
 </div>
 <script>
 (() => {
-  const root = document.documentElement, ov = document.getElementById('env-intro'), env = document.getElementById('env');
+  const root = document.documentElement, ov = document.getElementById('env-intro');
   let seen = false; try { seen = sessionStorage.getItem('mm-env') === '1'; } catch(e){}
   if (seen){ root.classList.add('no-intro'); return; }
   document.body.classList.add('intro-on');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let done = false;
   const finish = () => { if (done) return; done = true;
     try { sessionStorage.setItem('mm-env','1'); } catch(e){}
-    env.classList.add('open');
-    setTimeout(() => ov.classList.add('zoom'), reduce ? 0 : 1250);
-    setTimeout(() => { ov.classList.add('gone'); document.body.classList.remove('intro-on'); scrollTo(0,0); }, reduce ? 150 : 1700);
-    setTimeout(() => ov.remove(), reduce ? 1000 : 2600);
+    scrollTo(0,0); ov.classList.add('gone'); document.body.classList.remove('intro-on');
+    setTimeout(() => ov.remove(), 1000);
   };
   const t0 = performance.now();
-  const go = () => setTimeout(finish, Math.max(0, 1400 - (performance.now() - t0)));
+  const go = () => setTimeout(finish, Math.max(0, 2000 - (performance.now() - t0)));
   if (document.readyState === 'complete') go(); else addEventListener('load', go);
   setTimeout(finish, 6000);
   ov.addEventListener('click', finish);
-  ov.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') finish(); });
 })();
 </script>
 
