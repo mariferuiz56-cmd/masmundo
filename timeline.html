@@ -36,7 +36,8 @@
   .back:hover .arr{transform:translateX(-3px)}
   .back .logo{display:block;width:150px;aspect-ratio:480/71;background:var(--ink);
               -webkit-mask:url(assets/wordmark.png) left center/contain no-repeat;mask:url(assets/wordmark.png) left center/contain no-repeat}
-  .top .who{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+  .top{position:relative}
+  .emblem{position:absolute;right:clamp(16px,2vw,28px);top:clamp(16px,2.6vh,28px);display:block;width:8.4vw;min-width:64px;height:auto}
 
   main{flex:1;display:grid;place-items:center;padding:8px clamp(14px,3vw,40px) 40px}
   .wrap{width:min(920px,100%)}
@@ -85,8 +86,19 @@
   .card .desc:empty{display:none}
 
 
-  .extras{display:grid;grid-template-columns:1fr auto;gap:28px;margin-top:22px;border-bottom:1px solid var(--ink)}
+  .extras{display:grid;grid-template-columns:1fr auto;gap:28px;margin-top:22px;align-items:start}
+  .extras > *{border-bottom:1px solid var(--ink)}
   .extras h3{margin:0;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border-top:1px solid var(--ink);padding:9px 0 8px}
+  .certs summary{list-style:none;cursor:pointer}
+  .certs summary::-webkit-details-marker{display:none}
+  .certs summary h3{display:flex;align-items:center;gap:8px}
+  .certs summary h3::after{content:"";margin-left:auto;width:8px;height:8px;border-right:1.6px solid var(--ink);border-bottom:1.6px solid var(--ink);
+                           transform:translateY(-2px) rotate(45deg);transition:transform .25s}
+  .certs[open] summary h3::after{transform:translateY(2px) rotate(-135deg)}
+  .certs summary:hover h3{color:var(--pink)}
+  .certs .cnt{font-size:10px;background:var(--pink);color:#fff;border-radius:999px;padding:1px 6px;letter-spacing:0}
+  .certs[open] ul{animation:drop .3s ease}
+  @keyframes drop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
   .certs ul{list-style:none;margin:0;padding:0}
   .certs li{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:baseline;border-top:1px solid rgba(35,20,25,.18);padding:8px 0 9px;font-size:13px}
   .certs li b{font-weight:600}
@@ -101,7 +113,7 @@
           display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 24px;padding:10px clamp(16px,2vw,28px)}
 
   @media (max-width: 640px){
-    .top .who{display:none}
+    .emblem{position:static;width:44px;min-width:0}
     .back .logo{width:130px}
     .head p{display:none}
     .tl .yr:nth-of-type(even){display:none}
@@ -119,7 +131,7 @@
 
 <header class="top">
   <a class="back" href="/" aria-label="Back to masmundo"><span class="arr">&larr;</span><span class="logo" aria-hidden="true"></span></a>
-  <span class="who">Marifer Ruiz · Timeline</span>
+  <img class="emblem" src="assets/logo-anim.webp" alt="masmundo" width="90">
 </header>
 
 <main>
@@ -137,14 +149,14 @@
       <p class="desc" id="c-desc"></p>
     </div>
     <section class="extras" aria-label="Certifications and languages">
-      <div class="certs">
-        <h3>Certifications</h3>
+      <details class="certs">
+        <summary><h3>Certifications <span class="cnt">3</span></h3></summary>
         <ul>
           <li><b>Masters of AI, Core Curriculum (2026)</b><time>Jan 2026</time><span>Masters of AI</span></li>
           <li><b>AI Foundation&trade; Course</b><time>Aug 2025</time><span>Masters of AI</span></li>
           <li><b>Freelance Writing: How to Get Published in Print and Online</b><time>Feb 2019</time><span>City, University of London</span></li>
         </ul>
-      </div>
+      </details>
       <div class="langs">
         <h3>Languages</h3>
         <ul>
@@ -186,7 +198,7 @@ const STOPS = [
   { at:2024.4, end:2026.75, when:"2024 – 2026", place:"Austin, TX", pins:[[30.27,-97.74]], tz:[-6],
     role:"Co-Founder & Marketing Director · The Drøm", desc:"Grew The Drøm from Austin, directing campaigns from concept to launch and integrating AI into creative production for scalable photography, video and branded content." },
   { at:2026.8, end:2027.4, when:"Oct 2026 – Present", place:"Austin, TX", pins:[[30.27,-97.74]], tz:[-6],
-    role:"Senior Art Director · Dentsu Creative", desc:"Currently working with Adobe." },
+    role:"Senior Art Director · Dentsu Creative", desc:"Leading art direction on the Adobe account, developing creative for one of the world's leading creative technology brands." },
 ];
 
 (() => {
