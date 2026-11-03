@@ -95,6 +95,8 @@
   .burst{position:absolute;left:0;top:0;width:var(--bw,600px);aspect-ratio:1;pointer-events:none;z-index:301;opacity:0;
          transform:translate(-50%,-50%) scale(.2);
          background:radial-gradient(circle, #fff 0%, #fff 12%, rgba(255,255,250,.85) 22%, rgba(255,246,252,.35) 42%, rgba(255,255,255,0) 68%)}
+  .burst::before{content:"";position:absolute;left:50%;top:50%;width:150%;height:3px;border-radius:3px;
+         background:linear-gradient(90deg,transparent,#fff 35%,#fff 65%,transparent);transform:translate(-50%,-50%)}
   .burst.pop{animation:burstpop .7s cubic-bezier(.15,.8,.3,1)}
   @keyframes burstpop{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}12%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
 
@@ -345,7 +347,6 @@
 
     <div class="flash" id="flash"></div>
     <div class="burst" id="burst"></div>
-    <svg class="squig" id="squig" aria-hidden="true"></svg>
   </div>
 </main>
 
@@ -592,8 +593,7 @@ const PROJECTS = [
       el.style.zIndex = fly <= 0 ? 15 : (landed ? pr.z : 80 + i);
     });
 
-    if (fire && !reduce) squiggle(slotX, slotY - camH * .45, camW);
-    if (false && fire && !reduce){
+    if (fire && !reduce){
       burst.style.left = slotX + 'px'; burst.style.top = (slotY - camH * .18) + 'px';
       burst.style.setProperty('--bw', Math.max(W, H) * .9 + 'px');
       for (const f of [flash, burst]){ f.classList.remove('pop'); void f.offsetWidth; f.classList.add('pop'); }
