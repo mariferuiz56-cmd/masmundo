@@ -141,11 +141,12 @@
 
   /* ---------- loader ---------- */
   .env-intro{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#fff;
-             transition:opacity .8s ease, visibility 0s linear .8s}
+             transition:opacity .7s ease, visibility 0s linear .7s}
   .env-intro.gone{opacity:0;visibility:hidden;pointer-events:none}
   html.no-intro .env-intro{display:none}
   body.intro-on{overflow:hidden}
-  .env-intro img{width:min(200px,42vw);height:auto;display:block;animation:loadin .6s ease both}
+  .env-intro img{width:min(120px,25vw);height:auto;display:block;animation:loadin .6s ease both;transition:opacity .5s ease}
+  .env-intro.out img{opacity:0}
   @keyframes loadin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 
   /* ---------- lightbox ---------- */
@@ -220,8 +221,9 @@
   let done = false;
   const finish = () => { if (done) return; done = true;
     try { sessionStorage.setItem('mm-env','1'); } catch(e){}
-    scrollTo(0,0); ov.classList.add('gone'); document.body.classList.remove('intro-on');
-    setTimeout(() => ov.remove(), 1000);
+    scrollTo(0,0); ov.classList.add('out');
+    setTimeout(() => { ov.classList.add('gone'); document.body.classList.remove('intro-on'); }, 600);
+    setTimeout(() => ov.remove(), 1500);
   };
   const t0 = performance.now();
   const go = () => setTimeout(finish, Math.max(0, 2000 - (performance.now() - t0)));
