@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Timeline | Marifer Ruiz</title>
-<meta name="description" content="The life and career timeline of Marifer Ruiz, Senior Art Director and multidisciplinary artist: from Ciudad Juárez and El Paso to Florence, Monterrey, Barcelona, San Diego, London, Mexico City and Austin.">
+<meta name="description" content="The life and career timeline of Marifer Ruiz, Senior Art Director and multidisciplinary artist: from Ciudad Juárez and El Paso to Florence, Monterrey, Barcelona, San Diego, London, Mexico City and Austin, where she is a Senior Art Director at Dentsu Creative.">
 <link rel="canonical" href="https://masmundo.ai/timeline">
 <meta name="author" content="Marifer Ruiz">
 <meta property="og:type" content="website">
@@ -84,6 +84,18 @@
   .card .desc{margin:6px 0 0;font-size:13px;line-height:1.45}
   .card .desc:empty{display:none}
 
+
+  .extras{display:grid;grid-template-columns:1fr auto;gap:28px;margin-top:22px;border-bottom:1px solid var(--ink)}
+  .extras h3{margin:0;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border-top:1px solid var(--ink);padding:9px 0 8px}
+  .certs ul{list-style:none;margin:0;padding:0}
+  .certs li{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:baseline;border-top:1px solid rgba(35,20,25,.18);padding:8px 0 9px;font-size:13px}
+  .certs li b{font-weight:600}
+  .certs li span{color:var(--ink-soft)}
+  .certs li time{font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .langs{min-width:150px}
+  .langs ul{list-style:none;margin:0;padding:0}
+  .langs li{display:flex;align-items:center;gap:10px;border-top:1px solid rgba(35,20,25,.18);padding:8px 0 9px;font-size:13px;font-weight:500}
+  .flag{width:22px;height:15px;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(35,20,25,.15);overflow:hidden;flex:none}
   .hint{margin-top:12px;font-size:12px;color:var(--ink-soft);text-align:center}
   .credit{background:var(--pink);color:#fff;font:500 12px/1.4 var(--sans);letter-spacing:.02em;
           display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 24px;padding:10px clamp(16px,2vw,28px)}
@@ -96,6 +108,9 @@
     .card{position:relative;left:auto!important;top:auto!important;width:100%;margin-top:12px}
     .lead{display:none}
     .credit{flex-direction:column;align-items:center;text-align:center;padding:14px 18px}
+    .extras{grid-template-columns:1fr;gap:18px}
+    .certs li{grid-template-columns:1fr}
+    .hint{display:none}
   }
   @media (prefers-reduced-motion: reduce){ .pin.on i::after{animation:none} }
 </style>
@@ -121,6 +136,23 @@
       <p class="role" id="c-role"></p>
       <p class="desc" id="c-desc"></p>
     </div>
+    <section class="extras" aria-label="Certifications and languages">
+      <div class="certs">
+        <h3>Certifications</h3>
+        <ul>
+          <li><b>Masters of AI, Core Curriculum (2026)</b><time>Jan 2026</time><span>Masters of AI</span></li>
+          <li><b>AI Foundation&trade; Course</b><time>Aug 2025</time><span>Masters of AI</span></li>
+          <li><b>Freelance Writing: How to Get Published in Print and Online</b><time>Feb 2019</time><span>City, University of London</span></li>
+        </ul>
+      </div>
+      <div class="langs">
+        <h3>Languages</h3>
+        <ul>
+          <li><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="7" height="14" fill="#1E7A46"/><rect x="7" width="7" height="14" fill="#fff"/><rect x="14" width="7" height="14" fill="#CE2B37"/><circle cx="10.5" cy="7" r="1.6" fill="#8A5A2B"/></svg>Spanish</li>
+          <li><svg class="flag" viewBox="0 0 21 14" aria-hidden="true"><rect width="21" height="14" fill="#fff"/><g fill="#C8233A"><rect y="0" width="21" height="2"/><rect y="4" width="21" height="2"/><rect y="8" width="21" height="2"/><rect y="12" width="21" height="2"/></g><rect width="9" height="8" fill="#2A3A75"/></svg>English</li>
+        </ul>
+      </div>
+    </section>
     <p class="hint">Use the arrow keys or drag across the line to travel through time.</p>
   </div>
 </main>
@@ -140,19 +172,21 @@ const STOPS = [
   { at:2009.6, when:"Where it began", place:"Ciudad Juárez · El Paso, TX", pins:[[31.69,-106.42]], tz:[-7],
     role:"Hometowns", desc:"Growing up between two countries, on the border of Mexico and the United States." },
   { at:2011, end:2012, when:"2011 – 2012", place:"Florence, Italy", pins:[[43.77,11.25]], tz:[1],
-    role:"Fine Arts · LdM (Lorenzo de' Medici)", desc:"" },
+    role:"Istituto Lorenzo de' Medici · Fine Arts", desc:"Bachelor of Fine Arts studies in Fine and Studio Arts, in the city of the Renaissance." },
   { at:2012.4, end:2015, when:"2012 – 2015", place:"Monterrey, Mexico", pins:[[25.69,-100.32]], tz:[-6],
-    role:"", desc:"" },
+    role:"Universidad de Monterrey (UDEM) · BFA", desc:"Bachelor of Fine Arts in Fine and Studio Arts." },
   { at:2014.2, end:2014.8, when:"2014", place:"Barcelona, Spain", pins:[[41.39,2.17]], tz:[1],
-    role:"", desc:"" },
-  { at:2016, end:2018, when:"2016 – 2018", place:"San Diego, CA", pins:[[32.72,-117.16]], tz:[-8],
-    role:"", desc:"" },
-  { at:2018.4, end:2019, when:"2018 – 2019", place:"London, UK", pins:[[51.51,-0.13]], tz:[0],
-    role:"", desc:"" },
-  { at:2019.6, end:2024, when:"2019 – 2024", place:"Mexico City · El Paso · Remote", pins:[[19.43,-99.13],[31.76,-106.49]], tz:[-6,-7],
-    role:"", desc:"" },
-  { at:2024.4, end:2027, when:"2024 – 2027", place:"Austin, TX", pins:[[30.27,-97.74]], tz:[-6],
-    role:"", desc:"" },
+    role:"ESDi, Escola Superior de Disseny · Graphic Design", desc:"Semester abroad studying graphic design." },
+  { at:2016.4, end:2018.3, when:"2016 – 2018", place:"San Diego, CA", pins:[[32.72,-117.16]], tz:[-8],
+    role:"Digital Marketing Manager · Coolpad", desc:"Led digital marketing, content and brand management for the U.S. division of a global mobile technology company, including product launches with T-Mobile, MetroPCS and Cricket Wireless." },
+  { at:2018.7, end:2019.5, when:"2018 – 2019", place:"London, UK", pins:[[51.51,-0.13]], tz:[0],
+    role:"Bayes Business School · MSc Marketing Strategy and Innovation", desc:"Master's degree in marketing strategy and innovation, plus a certificate in freelance writing from City, University of London." },
+  { at:2020.4, end:2024, when:"2019 – 2024", place:"Mexico City · El Paso · Remote", pins:[[19.43,-99.13],[31.76,-106.49]], tz:[-6,-7],
+    role:"Co-Founder & Marketing Director · The Drøm", desc:"Co-founded a full-service creative and digital marketing agency in 2020, leading brand strategy, creative direction and integrated campaigns for B2B and B2C brands across the U.S. and international markets." },
+  { at:2024.4, end:2026.75, when:"2024 – 2026", place:"Austin, TX", pins:[[30.27,-97.74]], tz:[-6],
+    role:"Co-Founder & Marketing Director · The Drøm", desc:"Grew The Drøm from Austin, directing campaigns from concept to launch and integrating AI into creative production for scalable photography, video and branded content." },
+  { at:2026.8, end:2027.4, when:"Oct 2026 – Present", place:"Austin, TX", pins:[[30.27,-97.74]], tz:[-6],
+    role:"Senior Art Director · Dentsu Creative", desc:"Currently working with Adobe." },
 ];
 
 (() => {
