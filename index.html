@@ -463,7 +463,7 @@ const PROJECTS = [
   function rand(seed){ return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
   const narrow = () => stage.clientWidth < 600;
   // open spots on the desk (fractions of the stage), clear of the header, camera and center print
-  const SLOTS = [[.88,.78],[.73,.8],[.58,.82],[.43,.78],[.28,.82],[.64,.6],[.38,.62],[.14,.8],[.86,.5],[.18,.62]];
+  const SLOTS = [[.43,.79],[.56,.81],[.69,.78],[.81,.81],[.92,.77],[.74,.5],[.89,.52],[.77,.27],[.62,.63],[.5,.66]];
   function scatter(seed = 7){
     const R = rand(seed);
     if (narrow()){
@@ -479,7 +479,7 @@ const PROJECTS = [
     const order = SLOTS.map((s, k) => [R(), k]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
     prints.forEach((pr, i) => {
       if (i < SLOTS.length){ const [x, y] = SLOTS[order[i]]; pr.x = x + (R() - .5) * .05; pr.y = y + (R() - .5) * .05; }
-      else { pr.x = .3 + R() * .65; pr.y = .55 + R() * .35; }
+      else { pr.x = .45 + R() * .5; pr.y = .6 + R() * .25; }
       pr.r = (R() - .5) * 24;
     });
   }
