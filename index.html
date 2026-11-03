@@ -154,6 +154,9 @@
   .env-intro.out img{opacity:0}
   @keyframes loadin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 
+  .credit{background:var(--pink);color:#fff;font:500 12px/1.4 var(--sans);letter-spacing:.02em;
+          display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 24px;padding:10px clamp(16px,2vw,28px)}
+
   /* ---------- phone layout: camera first, info at the bottom ---------- */
   .m-info{display:none}
   @media (max-width: 599px){
@@ -306,6 +309,11 @@
 </main>
 
 <section class="m-info" id="m-info" aria-label="About Marifer Ruiz"></section>
+
+<div class="credit">
+  <span>Human-directed, created with AI tools.</span>
+  <span>&copy; 2026 Marifer Ruiz / masmundo. All work is original and my own. All rights reserved.</span>
+</div>
 
 <!-- footer hidden for now; restore by removing this comment wrapper
 <footer>
