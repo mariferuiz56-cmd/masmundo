@@ -149,6 +149,19 @@
   .env-intro.out img{opacity:0}
   @keyframes loadin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 
+  /* ---------- phone layout: camera first, info at the bottom ---------- */
+  .m-info{display:none}
+  @media (max-width: 599px){
+    .stage > .intro, .stage > .emblem, .stage > .caption{display:none}
+    .m-info{display:block;padding:44px 18px 56px;border-top:1px solid var(--ink);background:#fff}
+    .m-info .m-emblem{display:block;width:96px;margin:0 0 22px}
+    .m-info .intro{position:static;width:auto}
+    .m-info .intro .about dd p{display:block;-webkit-line-clamp:unset}
+    .m-info .intro .more{display:none}
+    .m-info .contact{flex-direction:column;align-items:flex-start;gap:10px}
+    .prompt{font-size:14px}
+  }
+
   /* ---------- lightbox ---------- */
   .box{position:fixed;inset:0;z-index:400;display:none;place-items:center;background:rgba(35,20,25,.55);padding:24px}
   .box.open{display:grid}
@@ -284,6 +297,8 @@
   </div>
 </main>
 
+<section class="m-info" id="m-info" aria-label="About Marifer Ruiz"></section>
+
 <!-- footer hidden for now; restore by removing this comment wrapper
 <footer>
   <ul>
@@ -397,6 +412,9 @@ const PROJECTS = [
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   reel.style.height = `calc(${(INTRO + N*SEG + OUTRO) * 100}svh)`;
 
+  const mInfo = $('m-info');
+  mInfo.innerHTML = '<img class="m-emblem" src="assets/logo-anim.webp" alt="" loading="lazy">' + intro.outerHTML.replace(/ id="(about|more)"/g, '');
+
   $('more').addEventListener('click', () => { const a = $('about'); a.classList.toggle('open'); $('more').textContent = a.classList.contains('open') ? 'Show less' : 'Read more'; render(); });
 
   function art(p, i){
@@ -431,12 +449,12 @@ const PROJECTS = [
   function scatter(seed = 7){
     const R = rand(seed);
     if (narrow()){
-      const allowed = [];
-      for (let a = 0; a < 360; a++) if (a < 200 || a > 340) allowed.push(a);
-      const start = Math.floor(R() * allowed.length);
+      // phones: spread the prints in a loose staggered grid below the camera
+      const spots = [[.28,.5],[.72,.47],[.3,.64],[.7,.62],[.28,.78],[.72,.76],[.3,.9],[.7,.9]];
+      const order = spots.map((s, k) => [R(), k]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
       prints.forEach((pr, i) => {
-        const a = allowed[(start + Math.floor(i * allowed.length / N) + allowed.length) % allowed.length] * Math.PI / 180;
-        pr.x = .5 + Math.cos(a) * (.34 + (R() - .5) * .05); pr.y = .62 + Math.sin(a) * (.26 + (R() - .5) * .05); pr.r = (R() - .5) * 24;
+        const [x, y] = spots[order[i % spots.length]];
+        pr.x = x + (R() - .5) * .06; pr.y = y + (R() - .5) * .03; pr.r = (R() - .5) * 16;
       });
       return;
     }
@@ -449,9 +467,9 @@ const PROJECTS = [
   }
   function tidy(){
     const W = stage.clientWidth, H = stage.clientHeight;
-    const em = document.querySelector('.emblem');
+    const em = document.querySelector('.stage > .emblem');
     const L = narrow() ? 0 : intro.offsetLeft + intro.offsetWidth + 10, avail = (narrow() ? W : em.offsetLeft - 10) - L - 20;
-    const top = narrow() ? H * .36 : 0, availH = H - top - 90;
+    const top = narrow() ? 24 : 0, availH = H - top - 90;
     // pick the column count whose grid fits largest, shrinking prints only if needed
     let best = null;
     for (let c = 2; c <= N; c++){
@@ -489,8 +507,8 @@ const PROJECTS = [
     // camera sits top-center; the print it ejects lands in the exact center of the screen,
     // as wide as the camera's lower body
     const nar = narrow();
-    const midY = nar ? H * .6 : H * .5;
-    const topLimit = nar ? intro.offsetTop + intro.offsetHeight + 10 : 14;
+    const midY = nar ? H * .52 : H * .5;
+    const topLimit = nar ? 20 : 14;
     const camW = Math.max(150, Math.min(nar ? W * .66 : Math.min(W * .36, 460), (midY - topLimit) / 1.434));
     const camH = camW * 618 / 600;
     const ejectS = (camW * .9) / pw, ejH = ph * ejectS;
