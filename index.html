@@ -278,14 +278,14 @@
   <h1>Marifer Ruiz, Senior Art Director and multidisciplinary artist (masmundo)</h1>
   <h2>Selected work</h2>
   <ul>
-    <li><h3>01. Abundance Island</h3><p>Personal Project · World-Building. An imagined world where nature, architecture, and everyday rituals are shaped by abundance. Through surreal proportions, repetition, and meticulously composed scenes, familiar elements become extraordinary expressions of color, order, and excess.</p></li>
-    <li><h3>02. Spinach Man for SaladPower</h3><p>Character Development · Art Direction. A character-led visual world developed for SaladPower, featuring a protagonist made entirely of spinach. Through cinematic scenes of movement, performance, and everyday rituals, Spinach Man transforms a simple product benefit into a recognizable personality and an evolving brand story.</p></li>
-    <li><h3>03. Easy Love for Isadora</h3><p>Music Artwork · Creative Direction. A visual identity developed for Isadora&#x27;s debut single, Easy Love. Through soft, nostalgic imagery and understated art direction, the artwork translates the intimacy of the song into a timeless visual expression.</p></li>
-    <li><h3>04. Part of the Process for Jones Road</h3><p>Beauty Campaign · Art Direction. A beauty campaign exploring makeup as part of everyday life rather than a separate ritual. Set between meetings, commutes, and spontaneous moments, the imagery captures a woman already in motion, where beauty exists naturally within her routine.</p></li>
-    <li><h3>05. El Luchador for El Luchador Tequila</h3><p>Brand Identity · Creative Direction. A visual identity inspired by the expressive world of Mexican lucha libre and the traditions of agave. Through bold compositions, cultural symbolism, and distinctive storytelling, the campaign establishes a recognizable visual language rooted in the brand&#x27;s heritage.</p></li>
-    <li><h3>06. Summer in Gaia for Cult Gaia</h3><p>Fashion Campaign · Art Direction. An imagined island documented through the lens of vintage travel photography. Blending surreal landscapes with nostalgic imagery, the campaign unfolds as a fictional photographic archive, capturing a place that feels both undiscovered and strangely familiar.</p></li>
-    <li><h3>07. From Seed to Stitch for RAS</h3><p>Fashion Campaign · Creative Direction. A visual exploration of the relationship between nature and fashion, tracing the journey of hemp from raw material to finished garment. Through botanical imagery and tactile storytelling, the campaign brings the origins of RAS into focus.</p></li>
-    <li><h3>08. Abundancia Eterna</h3><p>Personal Project · World-Building. An extension of Abundance Island inspired by the cultural richness of Mexico. Catrinas, marigolds, cacti, and luchadores take on monumental proportions, transforming familiar symbols into surreal compositions that explore tradition, identity, and the beauty of abundance.</p></li>
+    <li><h3>Abundance Island</h3><p>Personal Project · World-Building. An imagined world where nature, architecture, and everyday rituals are shaped by abundance. Through surreal proportions, repetition, and meticulously composed scenes, familiar elements become extraordinary expressions of color, order, and excess.</p></li>
+    <li><h3>Spinach Man for SaladPower</h3><p>Character Development · Art Direction. A character-led visual world developed for SaladPower, featuring a protagonist made entirely of spinach. Through cinematic scenes of movement, performance, and everyday rituals, Spinach Man transforms a simple product benefit into a recognizable personality and an evolving brand story.</p></li>
+    <li><h3>Easy Love for Isadora</h3><p>Music Artwork · Creative Direction. A visual identity developed for Isadora&#x27;s debut single, Easy Love. Through soft, nostalgic imagery and understated art direction, the artwork translates the intimacy of the song into a timeless visual expression.</p></li>
+    <li><h3>Part of the Process for Jones Road</h3><p>Beauty Campaign · Art Direction. A beauty campaign exploring makeup as part of everyday life rather than a separate ritual. Set between meetings, commutes, and spontaneous moments, the imagery captures a woman already in motion, where beauty exists naturally within her routine.</p></li>
+    <li><h3>El Luchador for El Luchador Tequila</h3><p>Brand Identity · Creative Direction. A visual identity inspired by the expressive world of Mexican lucha libre and the traditions of agave. Through bold compositions, cultural symbolism, and distinctive storytelling, the campaign establishes a recognizable visual language rooted in the brand&#x27;s heritage.</p></li>
+    <li><h3>Summer in Gaia for Cult Gaia</h3><p>Fashion Campaign · Art Direction. An imagined island documented through the lens of vintage travel photography. Blending surreal landscapes with nostalgic imagery, the campaign unfolds as a fictional photographic archive, capturing a place that feels both undiscovered and strangely familiar.</p></li>
+    <li><h3>From Seed to Stitch for RAS</h3><p>Fashion Campaign · Creative Direction. A visual exploration of the relationship between nature and fashion, tracing the journey of hemp from raw material to finished garment. Through botanical imagery and tactile storytelling, the campaign brings the origins of RAS into focus.</p></li>
+    <li><h3>Abundancia Eterna</h3><p>Personal Project · World-Building. An extension of Abundance Island inspired by the cultural richness of Mexico. Catrinas, marigolds, cacti, and luchadores take on monumental proportions, transforming familiar symbols into surreal compositions that explore tradition, identity, and the beauty of abundance.</p></li>
   </ul>
 </section>
 <main class="reel" id="reel">
@@ -461,7 +461,7 @@ const PROJECTS = [
   }
   const media = (p,i) => (p.thumb || p.img) ? `<img src="${p.thumb || p.img}" alt="${p.title}" loading="lazy">` : art(p,i);
   const metaOf = p => [p.kind, p.year].filter(Boolean).join(', ');
-  const numTitle = p => String(PROJECTS.indexOf(p) + 1).padStart(2, '0') + '. ' + p.title;
+  const numTitle = p => p.title;
 
   // ---------- prints ----------
   const prints = PROJECTS.map((p, i) => {
