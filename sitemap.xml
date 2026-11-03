@@ -12,4 +12,8 @@
     <image:image><image:loc>https://masmundo.ai/work/saladpower/stretch.webp</image:loc><image:title>Spinach Man for SaladPower</image:title></image:image>
     <image:image><image:loc>https://masmundo.ai/work/el-luchador/carry.webp</image:loc><image:title>El Luchador for El Luchador Tequila</image:title></image:image>
   </url>
+  <url>
+    <loc>https://masmundo.ai/timeline</loc>
+    <lastmod>2026-11-03</lastmod>
+  </url>
 </urlset>
