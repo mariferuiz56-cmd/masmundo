@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>masmundo — Marifer Ruiz</title>
+<meta name="description" content="Marifer Ruiz, Senior Art Director and multidisciplinary artist. Scroll to take the pictures, then arrange them on the desk.">
+<meta property="og:title" content="masmundo — Marifer Ruiz">
+<meta property="og:description" content="Senior Art Director and multidisciplinary artist working at the intersection of art, storytelling, technology, and culture.">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#ED55A6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ED55A6;
+    --lime:#CBD537;
+    --blush:#F3C7CD;
+    --ink:#231419;
+    --ink-soft:#6B5560;
+    --paper:#FFFEFB;
+    --mat:#FFFFFF;
+    --sans:"Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+    --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .32 0 0 0 0 .3 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+  body{margin:0;background:var(--mat);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--pink);outline-offset:3px;border-radius:4px}
+
+  /* ---------- cutting mat ---------- */
+  .mat{background:#fff}
+
+  /* ---------- stage ---------- */
+  .reel{position:relative}
+  .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+
+  /* ---------- minimal header, top-left ---------- */
+  .intro{position:absolute;left:clamp(16px,2vw,28px);top:clamp(16px,2.6vh,28px);width:min(400px,32vw);z-index:200}
+  .intro .logo{display:block;width:210px;aspect-ratio:480/71;background:var(--ink);
+               -webkit-mask:url(assets/wordmark.png) left center/contain no-repeat;mask:url(assets/wordmark.png) left center/contain no-repeat}
+  .intro h1{margin:0}
+  .intro dl{margin:16px 0 0}
+  .intro .row{display:grid;grid-template-columns:64px 1fr;align-items:baseline;gap:14px;border-top:1px solid var(--ink);padding:8px 0 9px}
+  .intro dt{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+  .intro dd{margin:0;font-size:14px;line-height:1.45}
+  .intro dd p{margin:0}
+  .intro .artist dd{font-size:16px;font-weight:600;letter-spacing:-.01em}
+  .intro .more{display:none}
+  .contact{border-top:1px solid var(--ink);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+  .icons{display:flex;gap:10px}
+  .icons a{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;color:var(--ink);transition:background .2s,color .2s}
+  .icons a:hover{background:var(--pink);color:#fff}
+  .icons svg{width:18px;height:18px}
+  .mail{font-size:14px;font-weight:500;text-decoration:none;width:max-content;
+        background:linear-gradient(var(--pink),var(--pink)) 0 100%/0 2px no-repeat;transition:background-size .3s}
+  .mail:hover{background-size:100% 2px}
+
+  .camera{position:absolute;left:0;top:0;width:300px;aspect-ratio:600/618;transform-origin:50% 70%;z-index:20;
+          filter:drop-shadow(0 2px 2px rgba(80,30,40,.18)) drop-shadow(18px 26px 26px rgba(80,30,40,.28));transition:transform .12s ease, opacity .5s ease}
+  .camera img{display:block;width:100%;height:100%;pointer-events:none;user-select:none}
+  .camera.snap{transform:scale(.985)}
+  .stage.tidied .camera{opacity:0}
+
+  .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:300}
+  .flash.pop{animation:flashpop .55s ease-out}
+  @keyframes flashpop{0%{opacity:.55}100%{opacity:0}}
+  .burst{position:absolute;left:0;top:0;width:var(--bw,600px);aspect-ratio:1;pointer-events:none;z-index:301;opacity:0;
+         transform:translate(-50%,-50%) scale(.2);
+         background:radial-gradient(circle, #fff 0%, #fff 12%, rgba(255,255,250,.85) 22%, rgba(255,246,252,.35) 42%, rgba(255,255,255,0) 68%)}
+  .burst::before,.burst::after{content:"";position:absolute;left:50%;top:50%;width:150%;height:3px;border-radius:3px;
+         background:linear-gradient(90deg,transparent,#fff 35%,#fff 65%,transparent);transform:translate(-50%,-50%)}
+  .burst::after{transform:translate(-50%,-50%) rotate(90deg)}
+  .burst.pop{animation:burstpop .7s cubic-bezier(.15,.8,.3,1)}
+  @keyframes burstpop{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}12%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+
+  .prompt{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-2deg);z-index:21;
+          background:var(--ink);color:var(--paper);font-weight:600;font-size:15px;padding:9px 16px 9px 18px;border-radius:999px;white-space:nowrap;
+          display:flex;align-items:center;gap:8px;transition:opacity .3s;box-shadow:0 8px 16px -10px rgba(35,20,25,.6)}
+  .prompt svg{width:14px;height:16px}
+
+  /* project caption: same ruled, minimal style as the header, bottom-left */
+  .caption{margin:0;position:absolute;left:clamp(16px,2vw,28px);bottom:clamp(16px,2.6vh,28px);width:min(400px,32vw);z-index:190;
+           background:#fff;border-bottom:1px solid var(--ink);transition:opacity .35s ease, transform .35s ease}
+  .caption.hide{opacity:0;transform:translateY(6px);pointer-events:none}
+  .caption .row{display:grid;grid-template-columns:64px 1fr;align-items:baseline;gap:14px;border-top:1px solid var(--ink);padding:8px 0 9px}
+  .caption dt{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+  .caption dd{margin:0;font-size:14px;line-height:1.45}
+  .caption .ttl dd{font-size:16px;font-weight:600;letter-spacing:-.01em}
+  .tape{position:absolute;width:96px;height:26px;background:
+        radial-gradient(circle, rgba(255,255,255,.75) 1.6px, transparent 2px) 0 0/10px 10px,
+        rgba(203,213,55,.78);
+        clip-path:polygon(3% 8%,10% 0,18% 9%,26% 1%,34% 8%,42% 0,50% 8%,58% 1%,66% 8%,74% 0,82% 9%,90% 1%,97% 7%,100% 50%,97% 93%,90% 100%,82% 92%,74% 100%,66% 92%,58% 99%,50% 92%,42% 100%,34% 92%,26% 99%,18% 91%,10% 100%,3% 92%,0 50%);
+        mix-blend-mode:multiply;z-index:2}
+
+  .tools{position:absolute;right:clamp(16px,2.4vw,36px);bottom:clamp(16px,3vh,32px);z-index:210;display:flex;gap:8px;align-items:center;
+         transition:opacity .35s ease, transform .35s ease}
+  .tools.hide{opacity:0;transform:translateY(8px);pointer-events:none}
+  .tools .hint{font-size:14px;font-weight:500;color:var(--ink-soft);margin-right:6px;background:var(--paper);padding:6px 10px;border-radius:6px}
+  .tools button{font:600 14px/1 var(--sans);color:var(--ink);background:var(--lime);border:0;border-radius:999px;padding:11px 18px;cursor:pointer;
+                box-shadow:0 6px 14px -8px rgba(35,20,25,.55)}
+  .tools button + button{background:var(--pink);color:#fff}
+  .tools button:hover{filter:brightness(1.05)}
+
+  /* ---------- instant prints ---------- */
+  .print{position:absolute;left:0;top:0;width:var(--pw);aspect-ratio:72/86;border-radius:2px;z-index:15;
+         background:linear-gradient(155deg,#fffefb 0%,#fbf8f2 55%,#f3efe7 100%);
+         padding:calc(var(--pw)*.06) calc(var(--pw)*.06) 0;
+         box-shadow:0 0 0 .5px rgba(35,20,25,.08), 0 1px 1.5px rgba(35,20,25,.18), 0 10px 18px -10px rgba(35,20,25,.45);
+         will-change:transform;visibility:hidden;user-select:none;-webkit-user-select:none}
+  .print::before{content:"";position:absolute;inset:0;background:var(--noise);opacity:.7;pointer-events:none;border-radius:inherit}
+  .print.landed{cursor:grab;touch-action:none}
+  .print.dragging{cursor:grabbing;box-shadow:0 0 0 .5px rgba(35,20,25,.08), 0 2px 3px rgba(35,20,25,.18), 0 34px 40px -20px rgba(35,20,25,.5)}
+  .stage.settling .print{transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+  .print .img{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#2b2f36;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+  .print .img img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+  .print .art{position:absolute;inset:0}
+  .print .dev{position:absolute;inset:0;background:linear-gradient(160deg,#3a3f4a,#23262d);opacity:0}
+  .print .gloss{position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 38%,rgba(255,255,255,0) 70%,rgba(255,255,255,.1) 100%);pointer-events:none}
+  .print .foot{position:relative;height:calc(var(--pw)*.235);display:flex;align-items:center;justify-content:center}
+  .print .lbl{font-family:"Permanent Marker",var(--sans);font-size:max(11px,calc(var(--pw)*.095));line-height:.98;text-transform:uppercase;letter-spacing:.01em;
+              max-width:100%;text-align:center;overflow-wrap:anywhere;color:#141214;transform:rotate(var(--tilt,-2deg));opacity:.92;mix-blend-mode:multiply;
+              text-shadow:0 0 .4px rgba(20,18,20,.6)}
+
+
+  /* ---------- lightbox ---------- */
+  .box{position:fixed;inset:0;z-index:400;display:none;place-items:center;background:rgba(35,20,25,.55);padding:24px}
+  .box.open{display:grid}
+  .box .card2{background:var(--paper);max-width:900px;width:100%;display:grid;grid-template-columns:1.1fr 1fr;border-radius:4px;overflow:hidden;max-height:calc(100svh - 48px)}
+  .box .pic{background:#2b2f36;position:relative;aspect-ratio:1/1}
+  .box .slides{position:absolute;inset:0;display:flex;transition:transform .45s cubic-bezier(.2,.8,.2,1);touch-action:pan-y}
+  .box .slide{position:relative;flex:0 0 100%;height:100%}
+  .box .slide img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+  .box .slide .art{position:absolute;inset:0}
+  .box .pic{overflow:hidden}
+  .box .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
+            background:rgba(255,254,251,.92);color:var(--ink);display:grid;place-items:center;box-shadow:0 6px 16px -8px rgba(35,20,25,.5);transition:background .2s,opacity .2s}
+  .box .nav:hover{background:var(--lime)}
+  .box .nav svg{width:20px;height:20px}
+  .box .nav[disabled]{opacity:0;pointer-events:none}
+  .box .prev{left:14px}.box .next{right:14px}
+  .box .count{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:rgba(35,20,25,.7);color:#fff;font-size:12px;font-weight:600;
+              padding:5px 10px;border-radius:999px;font-variant-numeric:tabular-nums}
+  .box .count:empty{display:none}
+  .box .txt{padding:34px 32px;overflow:auto;position:relative}
+  .box .meta{font-size:13px;color:var(--pink);font-weight:600;margin:0 0 8px}
+  .box h3{font-weight:700;font-size:38px;line-height:1;letter-spacing:-.035em;margin:0 0 14px}
+  .box p{margin:0 0 12px;color:var(--ink-soft)}
+  .box .roles{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);line-height:1.6;
+              border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:8px 0;margin:0 0 16px}
+  .box .roles:empty{display:none}
+  .box .pic.contain{background:#161314}
+  .box .pic.contain .slide img{object-fit:contain}
+  .box .pic{max-height:calc(100svh - 48px)}
+  .box .close{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:0;background:transparent;cursor:pointer;color:var(--ink)}
+  .box .close:hover{background:var(--blush)}
+
+  /* ---------- footer ---------- */
+  footer{position:relative;z-index:10;background:var(--pink);color:var(--lime);padding:clamp(56px,10vh,110px) clamp(20px,5vw,72px)}
+  footer ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 64px}
+  footer a{font-size:clamp(30px,4.4vw,64px);font-weight:700;letter-spacing:-.04em;text-decoration:none;
+           background:linear-gradient(var(--lime),var(--lime)) 0 100%/0 4px no-repeat;transition:background-size .3s}
+  footer a:hover, footer a:focus-visible{background-size:100% 4px}
+
+  /* ---------- mobile ---------- */
+  @media (max-width: 820px){
+    .intro{left:14px;right:14px;top:14px;width:auto}
+    .intro .logo{width:170px}
+    .intro dl{margin-top:10px}
+    .intro .row{padding:6px 0 7px}
+    .intro .about dd p{margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .intro .about.open dd p{-webkit-line-clamp:unset;display:block}
+    .intro .more{display:inline;all:unset;cursor:pointer;font-size:13px;font-weight:600;color:var(--pink)}
+    .contact{flex-direction:row;align-items:center;justify-content:space-between}
+    .caption{left:14px;right:14px;bottom:14px;width:auto;margin:0}
+    .tools .hint{display:none}
+    .box .card2{grid-template-columns:1fr;overflow:auto}
+    .box .pic{max-height:58svh;width:100%}
+    .box .txt{padding:22px}
+    .box h3{font-size:30px}
+  }
+</style>
+</head>
+<body>
+
+<main class="reel" id="reel">
+  <div class="stage mat" id="stage">
+
+    <header class="intro">
+      <h1><span class="logo" role="img" aria-label="masmundo"></span></h1>
+      <dl>
+        <div class="row artist"><dt>Artist</dt><dd>Marifer Ruiz</dd></div>
+        <div class="row about" id="about"><dt>About</dt><dd><p>Senior Art Director and multidisciplinary artist working at the intersection of art, storytelling, technology, and culture. With a background in Fine Arts and Marketing Strategy &amp; Innovation, I combine strong visual thinking with strategic insight to develop campaigns, visual worlds, and brand experiences across digital, social, motion, and emerging AI technologies.</p><button class="more" id="more" type="button">Read more</button></dd></div>
+      </dl>
+      <div class="contact">
+        <div class="icons">
+          <a href="https://www.instagram.com/masmundo.ai/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/marifer-ruiz/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3 9h3v12H3zM9 9h2.9v1.7h.04c.4-.76 1.38-1.95 3.06-1.95C18.3 8.75 21 10.4 21 14.4V21h-3v-5.9c0-1.6-.5-3-2.2-3-1.8 0-2.8 1.3-2.8 3.1V21H9z"/></svg>
+          </a>
+          <a href="https://www.pinterest.com/mas_mundo/" target="_blank" rel="noopener" aria-label="Pinterest">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.64 19.31c-.09-.79-.17-2 .03-2.86l1.18-5s-.3-.6-.3-1.49c0-1.4.81-2.44 1.82-2.44.86 0 1.27.64 1.27 1.41 0 .86-.55 2.15-.83 3.34-.24 1 .5 1.81 1.48 1.81 1.78 0 3.15-1.88 3.15-4.59 0-2.4-1.73-4.08-4.19-4.08-2.85 0-4.53 2.14-4.53 4.35 0 .86.33 1.79.75 2.29a.3.3 0 0 1 .07.29l-.28 1.13c-.04.18-.15.22-.34.13-1.25-.58-2.03-2.41-2.03-3.88 0-3.16 2.3-6.06 6.62-6.06 3.47 0 6.17 2.47 6.17 5.78 0 3.45-2.18 6.23-5.2 6.23-1.01 0-1.97-.53-2.29-1.15l-.62 2.37c-.23.87-.84 1.96-1.25 2.62A10 10 0 1 0 12 2Z"/></svg>
+          </a>
+        </div>
+        <a class="mail" href="mailto:mariferuiz56@gmail.com">mariferuiz56@gmail.com</a>
+      </div>
+    </header>
+
+    <dl class="caption hide" id="caption" aria-live="polite">
+      <div class="row ttl"><dt>Project</dt><dd id="cap-title"></dd></div>
+      <div class="row"><dt>Type</dt><dd id="cap-meta"></dd></div>
+      <div class="row"><dt>About</dt><dd id="cap-desc"></dd></div>
+    </dl>
+
+    <div class="camera" id="camera" aria-hidden="true"><img src="assets/camera.webp" alt="" draggable="false"></div>
+
+    <div class="prompt" id="prompt">scroll to take pictures <svg viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1v13M1.5 8.5 7 14l5.5-5.5"/></svg></div>
+
+    <div class="tools hide" id="tools">
+      <span class="hint">drag the prints around</span>
+      <button type="button" id="shuffle">Shuffle</button>
+      <button type="button" id="tidy">Tidy up</button>
+    </div>
+
+    <div class="flash" id="flash"></div>
+    <div class="burst" id="burst"></div>
+  </div>
+</main>
+
+<!-- footer hidden for now; restore by removing this comment wrapper
+<footer>
+  <ul>
+    <li><a href="mailto:mariferuiz56@gmail.com">Email</a></li>
+    <li><a href="https://www.linkedin.com/in/marifer-ruiz/" target="_blank" rel="noopener">LinkedIn</a></li>
+    <li><a href="https://www.instagram.com/masmundo.ai/" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="https://www.pinterest.com/mas_mundo/" target="_blank" rel="noopener">Pinterest</a></li>
+  </ul>
+</footer>
+-->
+
+<div class="box" id="box" role="dialog" aria-modal="true" aria-labelledby="box-title">
+  <div class="card2">
+    <div class="pic">
+      <div class="slides" id="box-pic"></div>
+      <button class="nav prev" id="box-prev" type="button" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="nav next" id="box-next" type="button" aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="count" id="box-count" aria-live="polite"></div>
+    </div>
+    <div class="txt">
+      <button class="close" id="box-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <p class="meta" id="box-meta"></p>
+      <h3 id="box-title"></h3>
+      <p class="roles" id="box-roles"></p>
+      <div id="box-desc"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   YOUR WORK — edit this list.
+   img: cover photo (e.g. "work/project-1/cover.jpg"); null shows a placeholder.
+   images: more photos for the pop-up gallery, e.g. ["work/project-1/2.jpg", "work/project-1/3.jpg"].
+   ========================================================= */
+const PROJECTS = [
+  { title:"Easy Love by Isadora", label:"Easy Love", kind:"Music artwork", year:"",
+    img:"work/easy-love/cover.webp",
+    images:["work/easy-love/mangoes.webp","work/easy-love/portraits.webp"], colors:["#2E6BC6","#C9B23C","#F28A2E"],
+    desc:"Creative direction and cover art for Isadora's debut single, Easy Love. The goal was a visual identity as soft, nostalgic and timeless as the song itself." },
+  { title:"Part of the Process for Jones Road", label:"Part of the Process", kind:"Beauty campaign, AI art direction", year:"",
+    img:"work/jones-road/books.webp", ratio:"4/5",
+    images:["work/jones-road/bag.webp","work/jones-road/coffee.webp","work/jones-road/toast.webp","work/jones-road/compact.webp","work/jones-road/notebook.webp","work/jones-road/bun.webp"],
+    colors:["#F3C7CD","#9FB8AE","#231419"],
+    roles:"Creative Direction · AI Art Direction · Campaign Development · Product Storytelling · Visual Concepting",
+    desc:"A Jones Road campaign built on one idea: beauty isn't a pause to get ready. It happens between meetings, in transit, mid-work. She's already in motion.",
+    long:["<em>Part of the Process</em> challenges the idea that beauty asks women to pause their lives to get ready. Instead, Jones Road becomes part of her momentum: applied between meetings, in transit, while working, creating or moving through her day.",
+          "The visual direction captures these candid, in-between moments with an intimate editorial feel, positioning beauty not as a separate ritual but as something that already lives within her day. She isn't getting ready. She's already in motion."] },
+  { title:"Summer in Gaia for Cult Gaia", label:"Summer in Gaia", kind:"Fashion campaign, AI art direction", year:"",
+    img:"work/cult-gaia/trio.webp", ratio:"4/5", fit:"contain",
+    images:["work/cult-gaia/market.webp","work/cult-gaia/stall.webp","work/cult-gaia/wall.webp","work/cult-gaia/red.webp","work/cult-gaia/back.webp","work/cult-gaia/vhs.webp","work/cult-gaia/above.webp","work/cult-gaia/grid.webp"],
+    colors:["#F2B705","#E2401C","#1E9E5A"],
+    roles:"Creative Direction · AI Art Direction · Campaign Development · Visual Storytelling · World-Building",
+    desc:"A surreal campaign documenting an imagined island, shot like vintage travel photography from visitors discovering it decades ago.",
+    long:["<em>Summer in Gaia</em> is a surreal campaign documenting an imagined island where nature, architecture and human life exist in harmony.",
+          "The visual direction draws from vintage travel photography and archival tourism imagery, so each scene feels like a photograph taken by visitors discovering the island decades ago. AI was used to build and art direct this fictional world while keeping a consistent photographic language, a nostalgic film quality and a strong sense of place. The result blurs the line between travel documentation and imagined reality."] },
+  { title:"Hemp campaign for RAS", label:"RAS", kind:"Fashion campaign, creative direction", year:"",
+    img:"work/ras/leaf.webp", ratio:"2/3",
+    images:["work/ras/basket.webp","work/ras/beanie.webp","work/ras/stripes.webp","work/ras/sky.webp","work/ras/river.webp","work/ras/fiber.webp","work/ras/coconut.webp","work/ras/canopy.webp","work/ras/pair.webp"],
+    colors:["#C9C93A","#2F5D2A","#D2462C"],
+    roles:"Creative Direction · AI Art Direction · Campaign Concept · Visual Storytelling",
+    desc:"A campaign for RAS, a plant-based clothing brand, that brings the hemp leaf into a new light and follows its garments from seed to stitch.",
+    long:["RAS makes high-quality garments from low-carbon, plant-based materials like hemp, with a supply chain certified to standards such as GOTS, Bluesign and Fair Trade. For RAS, sustainability isn't a trend but a value woven into every thread.",
+          "The campaign brings the hemp leaf into a new light. Through storytelling, it follows the plant from the field to the finished garment: harvested by hand, carried in woven baskets, washed in the river and worn in the same landscape it grew from. Sun-warmed film tones and light leaks give the world an honest, lived-in feel, from seed to stitch."] },
+  { title:"Project five",  kind:"Social",       year:"2025", img:null, images:[], colors:["#B79CFF","#CBD537","#ED55A6"],
+    desc:"One or two sentences about this project: what it was, who it was for, and what you did." },
+  { title:"Project six",   kind:"Packaging",    year:"2024", img:null, images:[], colors:["#F3C7CD","#ED55A6","#231419"],
+    desc:"One or two sentences about this project: what it was, who it was for, and what you did." },
+  { title:"Project seven", kind:"Editorial",    year:"2024", img:null, images:[], colors:["#00A38B","#FFE36E","#ED55A6"],
+    desc:"One or two sentences about this project: what it was, who it was for, and what you did." },
+  { title:"Project eight", kind:"Personal",     year:"2023", img:null, images:[], colors:["#231419","#CBD537","#F3C7CD"],
+    desc:"One or two sentences about this project: what it was, who it was for, and what you did." },
+];
+
+(() => {
+  const N = PROJECTS.length;
+  const INTRO = 0.55, SEG = 0.85, OUTRO = 1.25;   // screen-heights
+  const $ = id => document.getElementById(id);
+  const reel = $('reel'), stage = $('stage'), camera = $('camera'), intro = document.querySelector('.intro');
+  const flash = $('flash'), burst = $('burst'), prompt = $('prompt'), caption = $('caption'), tools = $('tools');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  reel.style.height = `calc(${(INTRO + N*SEG + OUTRO) * 100}svh)`;
+
+  $('more').addEventListener('click', () => { const a = $('about'); a.classList.toggle('open'); $('more').textContent = a.classList.contains('open') ? 'Show less' : 'Read more'; render(); });
+
+  function art(p, i){
+    const [a,b,c] = p.colors;
+    const shapes = [
+      `radial-gradient(circle at 32% 36%, ${b} 0 21%, transparent 22%), radial-gradient(circle at 68% 68%, ${c} 0 30%, transparent 31%), ${a}`,
+      `linear-gradient(160deg, transparent 52%, ${c} 52% 68%, transparent 68%), radial-gradient(circle at 66% 30%, ${b} 0 17%, transparent 18%), linear-gradient(${a}, ${a})`,
+      `radial-gradient(ellipse 62% 40% at 50% 100%, ${c} 0 98%, transparent 100%), radial-gradient(circle at 50% 38%, ${b} 0 19%, transparent 20%), ${a}`,
+      `conic-gradient(from 45deg at 50% 50%, ${a} 0 25%, ${b} 0 50%, ${a} 0 75%, ${c} 0)`,
+    ];
+    return `<div class="art" style="background:${shapes[i % shapes.length]}"></div>`;
+  }
+  const media = (p,i) => (p.thumb || p.img) ? `<img src="${p.thumb || p.img}" alt="${p.title}" loading="lazy">` : art(p,i);
+  const metaOf = p => [p.kind, p.year].filter(Boolean).join(', ');
+
+  // ---------- prints ----------
+  const prints = PROJECTS.map((p, i) => {
+    const el = document.createElement('div');
+    el.className = 'print';
+    el.setAttribute('role','button');
+    el.setAttribute('aria-label', `${p.title}, ${metaOf(p)}. Open details`);
+    el.innerHTML = `<div class="img">${media(p,i)}<div class="dev"></div><div class="gloss"></div></div><div class="foot"><span class="lbl" style="--tilt:${[-3,2,-1.5,3,-2.5,1.5,-3.5,2.5][i%8]}deg">${p.label || p.title}</span></div>`;
+    stage.insertBefore(el, tools);
+    return { el, dev: el.querySelector('.dev'), img: el.querySelector('.img'), x:0, y:0, r:0, z:40+i, t:0 };
+  });
+
+  // ---------- table layouts ----------
+  function rand(seed){ return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
+  const narrow = () => stage.clientWidth < 600;
+  // open spots on the desk (fractions of the stage), clear of the header, camera and center print
+  const SLOTS = [[.71,.21],[.88,.25],[.74,.53],[.9,.57],[.84,.82],[.64,.8],[.45,.83],[.16,.57],[.31,.64],[.53,.6]];
+  function scatter(seed = 7){
+    const R = rand(seed);
+    if (narrow()){
+      const allowed = [];
+      for (let a = 0; a < 360; a++) if (a < 200 || a > 340) allowed.push(a);
+      const start = Math.floor(R() * allowed.length);
+      prints.forEach((pr, i) => {
+        const a = allowed[(start + Math.floor(i * allowed.length / N) + allowed.length) % allowed.length] * Math.PI / 180;
+        pr.x = .5 + Math.cos(a) * (.34 + (R() - .5) * .05); pr.y = .62 + Math.sin(a) * (.26 + (R() - .5) * .05); pr.r = (R() - .5) * 24;
+      });
+      return;
+    }
+    const order = SLOTS.map((s, k) => [R(), k]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+    prints.forEach((pr, i) => {
+      if (i < SLOTS.length){ const [x, y] = SLOTS[order[i]]; pr.x = x + (R() - .5) * .05; pr.y = y + (R() - .5) * .05; }
+      else { pr.x = .3 + R() * .65; pr.y = .55 + R() * .35; }
+      pr.r = (R() - .5) * 24;
+    });
+  }
+  function tidy(){
+    const W = stage.clientWidth, H = stage.clientHeight, pw = printW(), ph = pw * 86/72;
+    const gx = pw * 1.12, gy = ph * 1.08;
+    const L = narrow() ? 0 : intro.offsetLeft + intro.offsetWidth + 10, avail = W - L - 20;
+    const cols = Math.max(2, Math.min(N, Math.floor(avail / gx))), rows = Math.ceil(N / cols);
+    const top = narrow() ? H * .36 : 0;
+    const oy = Math.max(top + ph/2 + 20, top + (H - top - (rows - 1) * gy) / 2);
+    prints.forEach((pr, i) => {
+      const c = i % cols, r = Math.floor(i / cols), inRow = Math.min(cols, N - r * cols), rx = L + (avail - (inRow - 1) * gx) / 2 + 10;
+      pr.x = (rx + c * gx) / W; pr.y = (oy + r * gy) / H; pr.r = 0;
+    });
+  }
+  scatter();
+
+  const clamp = (v, a=0, b=1) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const printW = () => { const W = stage.clientWidth; return W < 600 ? Math.min(W * .27, 130) : Math.min(Math.max(W * .12, 130), 205); };
+
+  let active = -2, zTop = 100;
+
+  function render(){
+    const H = stage.clientHeight, W = stage.clientWidth;
+    const p = clamp(-reel.getBoundingClientRect().top / H, 0, INTRO + N*SEG + OUTRO);
+    const pw = printW(), ph = pw * 86/72;
+    stage.style.setProperty('--pw', pw + 'px');
+
+    // film comes out from under the bottom edge of the camera
+    // camera sits top-center; the print it ejects lands in the exact center of the screen,
+    // as wide as the camera's lower body
+    const nar = narrow();
+    const midY = nar ? H * .6 : H * .5;
+    const topLimit = nar ? intro.offsetTop + intro.offsetHeight + 10 : 14;
+    const camW = Math.max(150, Math.min(nar ? W * .66 : Math.min(W * .36, 460), (midY - topLimit) / 1.434));
+    const camH = camW * 618 / 600;
+    const ejectS = (camW * .9) / pw, ejH = ph * ejectS;
+    const slotX = W / 2, slotY = midY - ejH * .4;
+    camera.style.width = camW + 'px';
+    camera.style.left = (slotX - camW * .49) + 'px';
+    camera.style.top = (slotY - camH * .975) + 'px';
+    prompt.style.top = midY + 'px';
+
+    let flashAmt = 0, fire = false;
+    prints.forEach((pr, i) => {
+      const t = clamp((p - INTRO - i * SEG) / SEG);
+      pr.t = t;
+      const el = pr.el;
+      if (t <= 0){ pr.fired = false; el.style.visibility = 'hidden'; el.classList.remove('landed'); el.tabIndex = -1; return; }
+      el.style.visibility = 'visible';
+      if (t < .08) flashAmt = Math.max(flashAmt, 1 - t / .08);
+      if (!pr.fired){ pr.fired = true; if (t < .5) fire = true; }
+
+      const eject = easeOut(clamp(t / .38));
+      const dev   = clamp((t - .28) / .36);
+      const fly   = ease(clamp((t - .62) / .38));
+
+      const top0 = slotY - ejH - 6, top1 = slotY - ejH * .1;
+      const ejCy = lerp(top0, top1, eject) + ejH/2;
+      const mxm = pw * .5 + 8, mym = ph * .5 + 8;
+      const tx = clamp(pr.x * W, mxm, W - mxm), ty = clamp(pr.y * H, mym, H - mym);
+      const cx = lerp(slotX, tx, fly), cy = lerp(ejCy, ty, fly) - Math.sin(fly * Math.PI) * 50;
+      const s = lerp(ejectS, 1, fly);
+      const rot = lerp((i % 2 ? .8 : -.8) * eject, pr.r, fly);
+      el.style.transform = `translate(${cx - pw/2}px, ${cy - ph/2}px) rotate(${rot}deg) scale(${s})`;
+
+      const k = 1 - dev;
+      pr.dev.style.opacity = (k * .94).toFixed(3);
+      pr.img.style.filter = k > .01 ? `blur(${(k*4).toFixed(2)}px) saturate(${(1 - k*.6).toFixed(2)})` : 'none';
+
+      const landed = t >= 1;
+      el.classList.toggle('landed', landed);
+      el.tabIndex = landed ? 0 : -1;
+      el.style.zIndex = fly <= 0 ? 15 : (landed ? pr.z : 80 + i);
+    });
+
+    if (fire && !reduce){
+      burst.style.left = slotX + 'px'; burst.style.top = (slotY - camH * .18) + 'px';
+      burst.style.setProperty('--bw', Math.max(W, H) * .9 + 'px');
+      for (const f of [flash, burst]){ f.classList.remove('pop'); void f.offsetWidth; f.classList.add('pop'); }
+    }
+    camera.classList.toggle('snap', flashAmt > .35);
+    prompt.style.opacity = p < INTRO * .7 ? 1 : 0;
+
+    const idx = p < INTRO ? -1 : Math.min(N, Math.floor((p - INTRO) / SEG));
+    if (idx !== active){
+      active = idx;
+      if (idx >= 0 && idx < N){
+        const d = PROJECTS[idx];
+        $('cap-meta').textContent = metaOf(d);
+        $('cap-title').textContent = d.title;
+        $('cap-desc').textContent = d.desc;
+        caption.classList.remove('hide');
+      } else caption.classList.add('hide');
+      tools.classList.toggle('hide', idx < N);
+    }
+  }
+
+  let ticking = false;
+  const onScroll = () => { if (!ticking){ ticking = true; requestAnimationFrame(() => { ticking = false; render(); }); } };
+  addEventListener('scroll', onScroll, { passive:true });
+  let wasNarrow = narrow();
+  addEventListener('resize', () => { if (narrow() !== wasNarrow){ wasNarrow = narrow(); scatter(); } onScroll(); });
+
+  // ---------- drag prints ----------
+  prints.forEach((pr, i) => {
+    const el = pr.el;
+    let sx, sy, ox, oy, moved, id = null;
+    el.addEventListener('pointerdown', e => {
+      if (pr.t < 1) return;
+      id = e.pointerId; el.setPointerCapture(id);
+      sx = e.clientX; sy = e.clientY; ox = pr.x; oy = pr.y; moved = 0;
+      pr.z = ++zTop; el.style.zIndex = pr.z;
+      el.classList.add('dragging');
+    });
+    el.addEventListener('pointermove', e => {
+      if (e.pointerId !== id) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      moved = Math.max(moved, Math.hypot(dx, dy));
+      const W = stage.clientWidth, H = stage.clientHeight, pw = printW();
+      pr.x = clamp(ox + dx / W, (pw * .3) / W, 1 - (pw * .3) / W);
+      pr.y = clamp(oy + dy / H, (pw * .4) / H, 1 - (pw * .4) / H);
+      render();
+    });
+    const end = e => {
+      if (e.pointerId !== id) return;
+      el.releasePointerCapture(id); id = null;
+      el.classList.remove('dragging');
+      if (moved < 6) open(i);
+    };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(i); } });
+  });
+
+  function settle(fn){ stage.classList.add('settling'); fn(); render(); setTimeout(() => stage.classList.remove('settling'), 750); }
+  let seed = 7;
+  $('shuffle').addEventListener('click', () => settle(() => { stage.classList.remove('tidied'); scatter(seed += 13); }));
+  $('tidy').addEventListener('click', () => settle(() => { stage.classList.add('tidied'); tidy(); }));
+
+  // ---------- lightbox ----------
+  const box = $('box');
+  let lastFocus = null;
+  // gallery: cover + extra images (placeholders until real photos are added)
+  const slidesOf = (p, i) => {
+    if (p.img || (p.images && p.images.length)){
+      return [p.img, ...(p.images || [])].filter(Boolean).map(src => `<img src="${src}" alt="${p.title}">`);
+    }
+    return [0, 1, 2, 3].map(k => art({ colors: [p.colors[k % 3], p.colors[(k + 1) % 3], p.colors[(k + 2) % 3]] }, i + k));
+  };
+  let slide = 0, slideCount = 0;
+  function show(n){
+    slide = Math.max(0, Math.min(slideCount - 1, n));
+    $('box-pic').style.transform = `translateX(${-slide * 100}%)`;
+    $('box-prev').disabled = slide === 0;
+    $('box-next').disabled = slide === slideCount - 1;
+    $('box-count').textContent = slideCount > 1 ? `${slide + 1} / ${slideCount}` : '';
+  }
+  $('box-prev').addEventListener('click', () => show(slide - 1));
+  $('box-next').addEventListener('click', () => show(slide + 1));
+  let swipeX = null;
+  $('box-pic').addEventListener('pointerdown', e => { swipeX = e.clientX; });
+  addEventListener('pointerup', e => { if (swipeX === null) return; const d = e.clientX - swipeX; swipeX = null; if (Math.abs(d) > 40) show(slide + (d < 0 ? 1 : -1)); });
+
+  function open(i){
+    const p = PROJECTS[i];
+    lastFocus = document.activeElement;
+    const slides = slidesOf(p, i);
+    slideCount = slides.length;
+    $('box-pic').style.transition = 'none';
+    $('box-pic').innerHTML = slides.map(h => `<div class="slide">${h}</div>`).join('');
+    show(0);
+    requestAnimationFrame(() => { $('box-pic').style.transition = ''; });
+    $('box-meta').textContent = metaOf(p);
+    $('box-title').textContent = p.title;
+    $('box-roles').textContent = p.roles || '';
+    $('box-desc').innerHTML = (p.long || [p.desc]).map(t => `<p>${t}</p>`).join('');
+    const pic = document.querySelector('.box .pic');
+    pic.style.aspectRatio = p.ratio || '1/1';
+    pic.classList.toggle('contain', p.fit === 'contain');
+    box.classList.add('open');
+    $('box-close').focus();
+  }
+  function close(){ box.classList.remove('open'); lastFocus && lastFocus.focus(); }
+  $('box-close').addEventListener('click', close);
+  box.addEventListener('click', e => { if (e.target === box) close(); });
+  addEventListener('keydown', e => {
+    if (!box.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowRight') show(slide + 1);
+    else if (e.key === 'ArrowLeft') show(slide - 1);
+  });
+
+  document.fonts && document.fonts.ready.then(render);
+  addEventListener('load', render);
+  render();
+})();
+</script>
+</body>
+</html>
