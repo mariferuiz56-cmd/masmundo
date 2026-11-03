@@ -132,6 +132,7 @@
   .tools button{font:600 14px/1 var(--sans);color:var(--ink);background:var(--lime);border:0;border-radius:999px;padding:11px 18px;cursor:pointer;
                 box-shadow:0 6px 14px -8px rgba(35,20,25,.55)}
   .tools button + button{background:var(--pink);color:#fff}
+  .tools #retake{background:var(--ink);color:#fff}
   .tools button:hover{filter:brightness(1.05)}
 
   /* ---------- instant prints ---------- */
@@ -338,6 +339,7 @@
       <span class="hint">drag the prints around</span>
       <button type="button" id="shuffle">Shuffle</button>
       <button type="button" id="tidy">Tidy up</button>
+      <button type="button" id="retake">Retake</button>
     </div>
 
     <div class="flash" id="flash"></div>
@@ -607,6 +609,8 @@ const PROJECTS = [
         caption.classList.remove('hide');
       } else caption.classList.add('hide');
       tools.classList.toggle('hide', idx < N);
+      // scrolling back up after "Tidy up": bring the camera back and return to the desk layout
+      if (idx < N && stage.classList.contains('tidied')){ stage.classList.remove('tidied'); tidyK = 1; scatter(seed); }
     }
   }
 
@@ -648,9 +652,15 @@ const PROJECTS = [
   });
 
   function settle(fn){ stage.classList.add('settling'); fn(); render(); setTimeout(() => stage.classList.remove('settling'), 750); }
-  let seed = 7;
+  var seed = 7;
   $('shuffle').addEventListener('click', () => settle(() => { stage.classList.remove('tidied'); scatter(seed += 13); }));
   $('tidy').addEventListener('click', () => settle(() => { stage.classList.add('tidied'); tidy(); }));
+  // retake: put every print back in the camera and start again from the top
+  $('retake').addEventListener('click', () => {
+    stage.classList.remove('tidied'); tidyK = 1; scatter(seed += 13);
+    prints.forEach((pr, i) => { pr.z = 40 + i; });
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
 
   // ---------- lightbox ----------
   const box = $('box');
