@@ -63,11 +63,18 @@
   /* ---------- map ---------- */
   .map{position:relative;width:100%;aspect-ratio:1800/823;background:#fff}
   .map > img{position:absolute;inset:0;width:100%;height:100%;display:block;user-select:none;pointer-events:none}
+  .pin{z-index:3}
   .tz{position:absolute;top:2.9%;bottom:2.9%;opacity:0;pointer-events:none;transition:opacity .35s, left .45s cubic-bezier(.3,.8,.2,1);
       background:repeating-linear-gradient(135deg, rgba(237,85,166,.55) 0 2px, rgba(237,85,166,.2) 2px 9px);
       border-left:1px dashed rgba(237,85,166,.6);border-right:1px dashed rgba(237,85,166,.6)}
   .tz.on{opacity:1}
-  .pin{position:absolute;width:0;height:0;pointer-events:none}
+  .pin{position:absolute;width:0;height:0}
+  .pin b{position:absolute;left:-15px;top:-15px;width:30px;height:30px;border-radius:50%;cursor:pointer}
+  .map.idle .pin i{background:var(--pink);box-shadow:0 0 0 2px #fff, 0 0 0 3.5px var(--pink);opacity:1}
+  .map.idle .pin:hover i{transform:scale(1.25)}
+  .card.off{opacity:0;visibility:hidden;pointer-events:none}
+  .lead.off{opacity:0}
+  .lead{transition:opacity .2s}
   .pin i{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--grey);border:2px solid #fff;
          box-shadow:0 0 0 1.5px var(--grey);opacity:.75;transition:all .3s cubic-bezier(.3,.8,.2,1)}
   .pin.on i{background:var(--pink);box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--pink), 0 6px 14px rgba(120,20,70,.35);opacity:1;transform:scale(1.25) translateY(-2px)}
@@ -85,7 +92,8 @@
   .lead line{stroke:var(--pink);stroke-width:2}
   .card{position:absolute;width:min(300px,46%);background:var(--pink);color:#fff;padding:14px 16px 16px;border-radius:3px;
         box-shadow:0 14px 30px -14px rgba(120,20,70,.6);transition:left .45s cubic-bezier(.3,.8,.2,1), top .45s cubic-bezier(.3,.8,.2,1), opacity .2s}
-  .card{padding-right:16px}
+  .card{padding-right:16px;z-index:6}
+  .lead{z-index:5}
   .card h2{padding-right:52px}
   .stamp{position:absolute;right:-18px;top:-22px;width:78px;padding:7px;background:#fffdf8;transform:rotate(7deg);
          filter:drop-shadow(0 6px 8px rgba(60,10,35,.28));
@@ -177,6 +185,7 @@
 <main>
   <div class="wrap">
     <div class="head"><h1>Where I've been</h1><p>Drag along the timeline</p></div>
+    <div class="area" id="area">
     <div class="tl" id="tl" role="slider" tabindex="0" aria-label="Timeline" aria-valuemin="0"></div>
     <div class="map" id="map">
       <img src="assets/cv-map.webp" alt="Hand-cut woodcut style map of the Americas and Europe" draggable="false">
@@ -189,6 +198,7 @@
       <h2 id="c-place"></h2>
       <p class="role" id="c-role"></p>
       <p class="desc" id="c-desc"></p>
+    </div>
     </div>
     <section class="extras" aria-label="Certifications and languages">
       <details class="certs">
@@ -207,7 +217,7 @@
         </ul>
       </details>
     </section>
-    <p class="hint">Use the arrow keys or drag across the line to travel through time.</p>
+    <p class="hint">Drag along the timeline or hover a pin on the map.</p>
   </div>
 </main>
 
@@ -272,7 +282,7 @@ const STOPS = [
     el.style.left = Math.max(1.3, a) + '%'; el.style.width = (Math.min(98.7, b) - Math.max(1.3, a)) + '%';
     map.insertBefore(el, $('lead')); return el; }));
   const pins = STOPS.map(s => s.pins.map(([la, lo]) => { const el = document.createElement('div'); el.className = 'pin';
-    const [x, y] = proj(la, lo); el.style.left = x + '%'; el.style.top = y + '%'; el.innerHTML = '<i></i>';
+    const [x, y] = proj(la, lo); el.style.left = x + '%'; el.style.top = y + '%'; el.innerHTML = '<i></i><b></b>';
     map.insertBefore(el, $('lead')); return { el, x, y }; }));
 
   // dotted route between consecutive places (gently arched)
@@ -346,9 +356,21 @@ const STOPS = [
   }
 
   let cur = -1;
+  function clear(){
+    if (cur === -1 && map.classList.contains('idle')) return;
+    cur = -1; map.classList.add('idle');
+    dots.forEach(d => d.classList.remove('on')); lbls.forEach(d => d.classList.remove('on'));
+    spans.forEach(d => d.style.opacity = 0);
+    tzs.forEach(g => g.forEach(el => el.classList.remove('on')));
+    pins.forEach(g => g.forEach(p => p.el.classList.remove('on')));
+    segs.forEach(g => { if (g){ g.p.classList.remove('past','now'); g.halo.classList.remove('on'); } });
+    card.classList.add('off'); $('lead').classList.add('off');
+    tl.removeAttribute('aria-valuenow'); tl.setAttribute('aria-valuetext', 'All places');
+  }
   function set(i){
     i = Math.max(0, Math.min(STOPS.length - 1, i));
     if (i === cur) return; const prev = cur; cur = i;
+    map.classList.remove('idle'); card.classList.remove('off'); $('lead').classList.remove('off');
     drawRoute(i, prev);
     const s = STOPS[i];
     dots.forEach((d, k) => d.classList.toggle('on', k === i));
@@ -391,13 +413,20 @@ const STOPS = [
   tl.addEventListener('pointercancel', () => dragging = false);
   tl.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown'){ e.preventDefault(); set(cur + 1); }
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ e.preventDefault(); set(cur - 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ e.preventDefault(); set(cur < 0 ? STOPS.length - 1 : cur - 1); }
     if (e.key === 'Home') set(0); if (e.key === 'End') set(STOPS.length - 1);
   });
   addEventListener('keydown', e => { if (document.activeElement === document.body){
     if (e.key === 'ArrowRight') set(cur + 1); if (e.key === 'ArrowLeft') set(cur - 1); } });
   addEventListener('resize', place);
-  set(0);
+  // hovering a pin on the map shows that place
+  pins.forEach((g, k) => g.forEach(p => {
+    p.el.querySelector('b').addEventListener('pointerenter', () => set(k));
+    p.el.querySelector('b').addEventListener('click', () => set(k));
+  }));
+  // leaving the timeline and map clears it back to all pins
+  $('area').addEventListener('pointerleave', e => { if (e.pointerType === 'mouse' && !dragging) clear(); });
+  clear();
   document.fonts && document.fonts.ready.then(place);
 })();
 </script>
