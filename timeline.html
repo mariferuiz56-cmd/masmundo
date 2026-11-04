@@ -20,7 +20,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
-<script defer src="/_vercel/insights/script.js"></script>
+<script>
+/* Owner opt-out: visit ?me=1 once per browser to stop counting your own visits (?me=0 to undo). */
+(function(){var q=new URLSearchParams(location.search).get('me'),k='mm-owner',off=false;
+try{if(q==='1')localStorage.setItem(k,'1');if(q==='0')localStorage.removeItem(k);off=localStorage.getItem(k)==='1';}catch(e){}
+if(q!==null)history.replaceState(null,'',location.pathname+location.hash);
+if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/insights/script.js';document.head.appendChild(s);}})();
+</script>
 <style>
   :root{--pink:#ED55A6;--lime:#CBD537;--ink:#231419;--ink-soft:#6B5560;--grey:#b9b0b4;
         --sans:"Instrument Sans","Helvetica Neue",Arial,system-ui,sans-serif}
