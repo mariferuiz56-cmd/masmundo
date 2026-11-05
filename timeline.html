@@ -87,6 +87,7 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
   .pin.on i::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:2px solid var(--pink);animation:ping 1.6s ease-out infinite}
   @keyframes ping{from{transform:scale(.4);opacity:.9}to{transform:scale(1.6);opacity:0}}
 
+  .sea{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
   .route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
   .route .seg{fill:none;stroke-width:4.5;stroke-linecap:round;stroke-dasharray:0 13;opacity:0;transition:opacity .35s, stroke .35s}
   .route .seg.past{opacity:1;stroke:#fff}
@@ -204,6 +205,7 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
     <div class="tl" id="tl" role="slider" tabindex="0" aria-label="Timeline" aria-valuemin="0"></div>
     <div class="map" id="map">
       <img src="assets/cv-map.webp" alt="Hand-cut woodcut style map of the Americas and Europe" draggable="false">
+      <svg class="sea" id="sea" viewBox="0 0 1800 823" aria-hidden="true"></svg>
       <svg class="route" id="route" viewBox="0 0 1800 823" aria-hidden="true"><defs id="rdefs"></defs></svg>
       <svg class="lead" id="lead" aria-hidden="true"><line id="leadline" x1="0" y1="0" x2="0" y2="0"/></svg>
     </div>
@@ -460,6 +462,156 @@ const STOPS = [
   $('area').addEventListener('pointerleave', e => { if (e.pointerType === 'mouse' && !dragging) clear(); });
   clear();
   document.fonts && document.fonts.ready.then(place);
+})();
+</script>
+<script>
+/* ---------- ocean life: fish, dolphins, a whale and a little ship, woodcut style ---------- */
+(() => {
+  const svg = document.getElementById('sea');
+  if (!svg || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const NS = 'http://www.w3.org/2000/svg', INK = '#141012';
+  const mk = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+
+  // shapes drawn facing right, centred on the origin, sitting on y=0
+  const SHAPES = {
+    fish: g => {
+      mk('path', {d:'M-15,0 C-7,-8 8,-8 16,0 C8,7 -7,7 -15,0 Z M-13,0 L-24,-8 L-20,0 L-24,8 Z', fill:INK}, g);
+      mk('circle', {cx:9, cy:-1.5, r:1.6, fill:'#fff'}, g);
+      mk('path', {d:'M4,-4 C6,-1 6,1 4,4 M-4,-3 C-2,-1 -2,1 -4,3', fill:'none', stroke:'#fff', 'stroke-width':1.2, 'stroke-linecap':'round'}, g);
+    },
+    dolphin: g => {
+      mk('path', {d:'M48,4 C44,3 40,2 35,1 C33,-5 28,-9 20,-11 C6,-14 -10,-12 -24,-7 C-31,-4 -36,-1 -40,2 L-49,-7 L-45,3 L-51,11 L-39,6 C-28,9 -12,10 2,8 C16,7 30,7 40,7 C44,7 47,6 48,4 Z', fill:INK}, g);
+      mk('path', {d:'M-8,-12 C-5,-17 0,-21 6,-23 C4,-19 3,-15 4,-11 Z M10,7 C7,11 4,14 1,16 C7,15 12,12 16,8 Z', fill:INK}, g);
+      mk('circle', {cx:27, cy:-3, r:1.8, fill:'#fff'}, g);
+      mk('path', {d:'M-30,3 C-14,6 8,5 36,4', fill:'none', stroke:'#fff', 'stroke-width':1.6, 'stroke-linecap':'round'}, g);
+    },
+    tail: g => {
+      mk('path', {d:'M-6,8 C-6,-4 -5,-12 -4,-18 C-14,-18 -27,-23 -35,-37 C-23,-35 -10,-33 0,-26 C10,-33 23,-35 35,-37 C27,-23 14,-18 4,-18 C5,-12 6,-4 6,8 Z', fill:INK}, g);
+      mk('path', {d:'M-27,-32 C-17,-27 -9,-25 -2,-23 M27,-32 C17,-27 9,-25 2,-23', fill:'none', stroke:'#fff', 'stroke-width':1.4, 'stroke-linecap':'round'}, g);
+    },
+    ship: g => {
+      mk('path', {d:'M-30,0 L30,0 L22,10 L-22,10 Z', fill:INK}, g);
+      mk('path', {d:'M0,0 L0,-44', stroke:INK, 'stroke-width':2.6}, g);
+      mk('path', {d:'M2,-42 C14,-34 16,-16 4,-4 Z', fill:'#fff', stroke:INK, 'stroke-width':2.2, 'stroke-linejoin':'round'}, g);
+      mk('path', {d:'M-2,-38 C-14,-30 -18,-14 -4,-6 Z', fill:'#fff', stroke:INK, 'stroke-width':2.2, 'stroke-linejoin':'round'}, g);
+      mk('path', {d:'M0,-44 L10,-48 L0,-51', fill:INK}, g);
+      mk('path', {d:'M-16,5 L16,5', stroke:'#fff', 'stroke-width':1.3, 'stroke-dasharray':'3 4'}, g);
+    }
+  };
+
+  // open water only (map units, 1800 x 823); y is the water line the animal jumps from
+  const ZONES = [
+    {x:[780,1240], y:[440,740], w:5},   // central Atlantic
+    {x:[940,1290], y:[90,250],  w:3},   // north Atlantic
+    {x:[730,860],  y:[470,600], w:2},   // off the US east coast
+    {x:[408,452],  y:[640,652], w:1, small:true} // Gulf of Mexico
+  ];
+  const zone = small => { const z = ZONES.filter(z => small || !z.small); let t = Math.random() * z.reduce((s, q) => s + q.w, 0); for (const q of z) { if ((t -= q.w) <= 0) return q; } return z[0]; };
+
+  let clipId = 0, live = 0;
+  const actors = new Set();
+  const layer = mk('g', {}, svg);
+
+  function clipped(y0) {               // everything below the water line is hidden
+    const id = 'seaclip' + (++clipId);
+    const cp = mk('clipPath', {id}, layer);
+    mk('rect', {x:0, y:y0 - 400, width:1800, height:400.5}, cp);
+    const g = mk('g', {'clip-path':`url(#${id})`}, layer);
+    return {g, done: () => { g.remove(); cp.remove(); }};
+  }
+
+  function ripple(x, y, size = 1, delay = 0) {
+    const e = mk('ellipse', {cx:x, cy:y + 1, rx:2, ry:.8, fill:'none', stroke:INK, 'stroke-width':1.8, opacity:0}, layer);
+    actors.add({t0: performance.now() + delay, dur: 1400, step(p){ e.setAttribute('rx', 3 + 22 * size * p); e.setAttribute('ry', (3 + 22 * size * p) * .28); e.setAttribute('opacity', p < .1 ? p * 9 : .9 * (1 - p)); }, end(){ e.remove(); }});
+  }
+  function splash(x, y, size = 1, delay = 0) {
+    ripple(x, y, size, delay); ripple(x, y, size * .6, delay + 220);
+    for (let i = 0; i < 4; i++) {
+      const vx = rnd(-14, 14) * size, vy = rnd(14, 26) * size, r = rnd(1.4, 2.6) * size;
+      const d = mk('circle', {cx:x, cy:y, r, fill:INK, opacity:0}, layer);
+      actors.add({t0: performance.now() + delay, dur: 650, step(p){ d.setAttribute('cx', x + vx * p); d.setAttribute('cy', y - vy * 4 * p * (1 - p)); d.setAttribute('opacity', p < .85 ? 1 : (1 - p) / .15); }, end(){ d.remove(); }});
+    }
+  }
+
+  // an animal leaping along a parabola, nose following the curve
+  function leap(kind, x0, y0, dir, dx, h, dur, scale, delay = 0) {
+    const {g, done} = clipped(y0);
+    const a = mk('g', {}, g); SHAPES[kind](a);
+    a.setAttribute('transform', `translate(${x0},${y0 + 60})`);
+    const sink = kind === 'dolphin' ? 22 : 12;  // starts and ends just under the surface
+    live++;
+    setTimeout(() => splash(x0 + dir * dx * .08, y0, scale * .9), delay + dur * .06);
+    setTimeout(() => splash(x0 + dir * dx * .92, y0, scale * .9), delay + dur * .9);
+    actors.add({t0: performance.now() + delay, dur, step(p){
+      const x = x0 + dir * dx * p, y = y0 + sink - (h + sink) * 4 * p * (1 - p);
+      const ang = Math.atan2(-(h + sink) * 4 * (1 - 2 * p), dx) * 180 / Math.PI;
+      a.setAttribute('transform', `translate(${x},${y}) scale(${dir * scale},${scale}) rotate(${ang})`);
+    }, end(){ done(); live--; }});
+  }
+
+  function fish() {
+    const z = zone(true), n = z.small ? 1 : pick([1, 1, 2, 3]), dir = pick([1, -1]);
+    const x0 = rnd(...z.x), y0 = rnd(...z.y), s = z.small ? .55 : rnd(.75, 1);
+    for (let i = 0; i < n; i++) leap('fish', x0 + i * rnd(10, 22) * -dir, y0 + rnd(-3, 3), dir, rnd(46, 70) * s, rnd(26, 40) * s, rnd(900, 1200), s, i * rnd(160, 300));
+  }
+  function dolphin() {
+    const z = zone(false), n = pick([1, 2, 2, 3]), dir = pick([1, -1]);
+    const x0 = rnd(...z.x), y0 = rnd(...z.y);
+    for (let i = 0; i < n; i++) leap('dolphin', x0 - dir * i * rnd(30, 46), y0 + rnd(-6, 6), dir, rnd(120, 150), rnd(40, 56), rnd(1500, 1800), rnd(.8, .95), i * rnd(260, 420));
+  }
+  function whale() {
+    const z = ZONES[pick([0, 0, 1])], x = rnd(...z.x), y = rnd(...z.y);
+    const {g, done} = clipped(y), a = mk('g', {}, g); SHAPES.tail(a);
+    const lean = rnd(-8, 8); live++;
+    ripple(x, y, 1.4); setTimeout(() => ripple(x, y, 1.8), 2600);
+    actors.add({t0: performance.now(), dur: 4200, step(p){
+      const up = p < .35 ? p / .35 : p < .6 ? 1 : 1 - (p - .6) / .4;
+      const e = up * up * (3 - 2 * up);
+      a.setAttribute('transform', `translate(${x},${y + 54 - 54 * e}) rotate(${lean + (1 - e) * 10}) scale(1.3)`);
+    }, end(){ done(); live--; }});
+    spout(x + pick([-60, 60]), y, 300);
+  }
+  function spout(x, y, delay) {
+    const g = mk('g', {opacity:0}, layer);
+    [[-1, 0], [0, 0], [1, 0]].forEach(([k]) => mk('path', {d:`M0,0 C${k * 3},-10 ${k * 10},-18 ${k * 15},-20`, fill:'none', stroke:INK, 'stroke-width':2.2, 'stroke-linecap':'round'}, g));
+    [[-16, -22], [16, -22], [0, -26]].forEach(([cx, cy]) => mk('circle', {cx, cy, r:2, fill:INK}, g));
+    actors.add({t0: performance.now() + delay, dur: 1800, step(p){ const s = .3 + .9 * Math.min(1, p * 2.2); g.setAttribute('transform', `translate(${x},${y}) scale(${s})`); g.setAttribute('opacity', p < .15 ? p / .15 : 1 - Math.max(0, p - .5) / .5); }, end(){ g.remove(); }});
+  }
+  function bubbles() { const z = zone(false); ripple(rnd(...z.x), rnd(...z.y), rnd(.6, 1)); }
+
+  // a little ship crossing the Atlantic, very slowly
+  const shipG = mk('g', {opacity:0}, svg), ship = mk('g', {}, shipG); SHAPES.ship(ship);
+  let shipT = performance.now() - rnd(0, 60000);
+  const SHIP = {x:[820, 1220], y:690, dur: 90000};
+
+  const SPAWN = [[fish, 42], [dolphin, 30], [whale, 12], [bubbles, 16]];
+  let next = performance.now() + 1200, visible = true, raf = 0;
+  function spawn() {
+    if (live >= 3) return;
+    let t = Math.random() * 100; for (const [f, w] of SPAWN) { if ((t -= w) <= 0) return f(); }
+  }
+  function frame(now) {
+    raf = requestAnimationFrame(frame);
+    if (now >= next) { spawn(); next = now + rnd(1800, 4200); }
+    for (const a of actors) {
+      const p = (now - a.t0) / a.dur;
+      if (p < 0) continue;
+      if (p >= 1) { a.end(); actors.delete(a); continue; }
+      a.step(p);
+    }
+    let sp = ((now - shipT) % (SHIP.dur * 2)) / SHIP.dur, dir = 1;
+    if (sp > 1) { sp = 2 - sp; dir = -1; }
+    const sx = SHIP.x[0] + (SHIP.x[1] - SHIP.x[0]) * sp, bob = Math.sin(now / 900) * 1.6, roll = Math.sin(now / 1300) * 3;
+    ship.setAttribute('transform', `translate(${sx},${SHIP.y + bob}) scale(${dir * .7},.7) rotate(${roll})`);
+    shipG.setAttribute('opacity', Math.min(1, Math.min(sp, 1 - sp) * 25));
+  }
+  const start = () => { if (!raf && visible && !document.hidden) { next = performance.now() + 800; raf = requestAnimationFrame(frame); } };
+  const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; visible ? start() : stop(); }).observe(svg);
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  start();
 })();
 </script>
 </body>
