@@ -96,10 +96,10 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
   .route .halo{fill:none;stroke:#231419;stroke-width:10;stroke-linecap:round;stroke-dasharray:0 13;opacity:0;transition:opacity .35s}
   .route .halo.on{opacity:.9}
   .lead{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-  .lead line{stroke:var(--pink);stroke-width:2}
-  .card{position:absolute;width:min(300px,46%);background:var(--pink);color:#fff;padding:14px 16px 16px;border-radius:3px;
-        box-shadow:0 14px 30px -14px rgba(120,20,70,.6);transition:left .45s cubic-bezier(.3,.8,.2,1), top .45s cubic-bezier(.3,.8,.2,1), opacity .2s}
-  .card{padding-right:16px;z-index:6}
+  .lead line{stroke:var(--ink);stroke-width:2;stroke-dasharray:5 4}
+  .card{position:absolute;width:min(300px,46%);background:#fffdf8;color:var(--ink);padding:16px 18px 18px;border-radius:0;border:2.5px solid var(--ink);
+        box-shadow:inset 0 0 0 4px #fffdf8, inset 0 0 0 5.5px var(--ink), 6px 6px 0 var(--ink);transition:left .45s cubic-bezier(.3,.8,.2,1), top .45s cubic-bezier(.3,.8,.2,1), opacity .2s}
+  .card{padding-right:18px;z-index:6}
   .lead{z-index:5}
   .card h2{padding-right:52px}
   .stamp{position:absolute;right:-18px;top:-22px;width:78px;padding:7px;background:#fffdf8;transform:rotate(7deg);
@@ -112,9 +112,9 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
   .stamp .in{border:1.5px solid #231419;padding:3px 3px 2px}
   .stamp svg{display:block;width:100%;height:auto}
   .stamp b{display:block;font:700 7px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#231419;text-align:center;padding:3px 0 1px;white-space:nowrap;overflow:hidden}
-  .card .when{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+  .card .when{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#B8286F}
   .card h2{margin:4px 0 0;font-size:20px;line-height:1.1;font-weight:700;letter-spacing:-.02em}
-  .card .role{margin:8px 0 0;padding-top:8px;border-top:1px solid rgba(255,255,255,.55);font-size:13px;font-weight:600}
+  .card .role{margin:8px 0 0;padding-top:8px;border-top:1.5px solid var(--ink);font-size:13px;font-weight:600}
   .card .role:empty{display:none}
   .card .desc{margin:6px 0 0;font-size:13px;line-height:1.45}
   .card .desc:empty{display:none}
@@ -268,21 +268,21 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
    ========================================================= */
 const STOPS = [
   { at:2009.6, when:"Where it began", place:"Ciudad Juárez · El Paso, TX", pins:[[31.69,-106.42]], tz:[-7],
-    role:"Hometowns", desc:"Growing up between two countries, on the border of Mexico and the United States." },
+    role:"Hometowns · Two Countries, One Perspective", desc:"Raised between Mexico and the United States, where two cultures, languages, and ways of seeing the world became part of my everyday life. A border upbringing that continues to shape my perspective, creative identity, and work." },
   { at:2011, end:2012, when:"2011 – 2012", place:"Florence, Italy", pins:[[43.77,11.25]], tz:[1],
     role:"Istituto Lorenzo de' Medici · Fine Arts", desc:"Bachelor of Fine Arts studies in Fine and Studio Arts, in the city of the Renaissance." },
   { at:2012.4, end:2015, when:"2012 – 2015", place:"Monterrey, Mexico", pins:[[25.69,-100.32]], tz:[-6],
-    role:"Universidad de Monterrey (UDEM) · BFA", desc:"Bachelor of Fine Arts in Fine and Studio Arts." },
+    role:"Bachelor of Fine Arts · Universidad de Monterrey", desc:"Built my artistic foundation through a Bachelor of Fine Arts in Fine and Studio Arts. Developed a multidisciplinary approach to visual expression, grounded in artistic exploration, conceptual thinking, and experimentation." },
   { at:2014.2, end:2014.8, when:"2014", place:"Barcelona, Spain", pins:[[41.39,2.17]], tz:[1],
-    role:"ESDi, Escola Superior de Disseny · Graphic Design", desc:"Semester abroad studying graphic design." },
+    role:"Graphic Design · ESDi, Escola Superior de Disseny", desc:"Studied graphic design abroad, immersing myself in a new creative environment and European design culture. An early chapter in developing a visual perspective shaped by curiosity, experimentation, and life across borders." },
   { at:2016.4, end:2018.3, when:"2016 – 2018", place:"San Diego, CA", pins:[[32.72,-117.16]], tz:[-8],
-    role:"Digital Marketing Manager · Coolpad", desc:"Led digital marketing, content and brand management for the U.S. division of a global mobile technology company, including product launches with T-Mobile, MetroPCS and Cricket Wireless." },
+    role:"Digital Marketing Manager · Coolpad", desc:"Directed digital marketing, content, and brand initiatives for the U.S. division of a global mobile technology company. Helped bring products to market through integrated campaigns and launches with major U.S. wireless carriers." },
   { at:2018.7, end:2019.5, when:"2018 – 2019", place:"London, UK", pins:[[51.51,-0.13]], tz:[0],
-    role:"Bayes Business School · MSc Marketing Strategy and Innovation", desc:"Master's degree in marketing strategy and innovation, plus a certificate in freelance writing from City, University of London." },
-  { at:2020.4, end:2024, when:"2019 – 2024", place:"Mexico City · El Paso · Remote", pins:[[19.43,-99.13],[31.76,-106.49]], tz:[-6,-7],
-    role:"Co-Founder & Marketing Director · The Drøm", desc:"Co-founded a full-service creative and digital marketing agency in 2020, leading brand strategy, creative direction and integrated campaigns for B2B and B2C brands across the U.S. and international markets." },
-  { at:2024.4, end:2027.4, when:"2024 – Present", place:"Austin, TX", pins:[[30.27,-97.74]], tz:[-6],
-    role:"Senior Art Director · Dentsu Creative", desc:"Since October 2026, leading art direction on the Adobe account at Dentsu Creative. Before that, led The Drøm from Austin as Co-Founder and Marketing Director, directing campaigns from concept to launch and integrating AI into creative production." },
+    role:"MSc Marketing Strategy & Innovation · Bayes Business School", desc:"Expanded my creative foundation through a master's degree in marketing strategy and innovation, exploring the relationship between ideas, business, and culture. Also completed a certificate in freelance writing at City, University of London." },
+  { at:2020.2, end:2026, when:"2020 – 2026", place:"Mexico City · El Paso · Remote", pins:[[19.43,-99.13],[31.76,-106.49]], tz:[-6,-7],
+    role:"Co-Founder & Marketing Director · The Drøm", desc:"Co-founded an independent creative and digital agency, shaping its vision from the ground up. Led brand strategy, creative direction, and integrated campaigns for B2B and B2C brands across U.S. and international markets." },
+  { at:2026.3, end:2027.4, when:"2026 – Present", place:"Austin, TX", pins:[[30.27,-97.74]], tz:[-6],
+    role:"Senior Art Director · Dentsu Creative", desc:"Leading art direction for Adobe, translating creative strategy into compelling visual experiences. Bringing together design, storytelling, and emerging technology to shape work at the intersection of creativity and innovation." },
 ];
 
 (() => {
