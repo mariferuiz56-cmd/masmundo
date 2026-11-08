@@ -92,7 +92,7 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
   @keyframes ping{from{transform:scale(.4);opacity:.9}to{transform:scale(1.6);opacity:0}}
 
   .sea{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-  .route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;visibility:hidden}
   .route .seg{fill:none;stroke-width:4.5;stroke-linecap:round;stroke-dasharray:0 13;opacity:0;transition:opacity .35s, stroke .35s}
   .route .seg.past{opacity:1;stroke:#fff}
   .route .seg.past.shadow{stroke:#231419;stroke-width:8;opacity:.0}
@@ -504,6 +504,24 @@ const STOPS = [
       mk('path', {d:'M-2,-38 C-14,-30 -18,-14 -4,-6 Z', fill:'#fff', stroke:INK, 'stroke-width':2.2, 'stroke-linejoin':'round'}, g);
       mk('path', {d:'M0,-44 L10,-48 L0,-51', fill:INK}, g);
       mk('path', {d:'M-16,5 L16,5', stroke:'#fff', 'stroke-width':1.3, 'stroke-dasharray':'3 4'}, g);
+    },
+    sail: g => {
+      mk('path', {d:'M-20,0 L22,0 L15,8 L-14,8 Z', fill:INK}, g);
+      mk('path', {d:'M0,0 L0,-36', stroke:INK, 'stroke-width':2.2}, g);
+      mk('path', {d:'M2,-34 L20,-4 L2,-4 Z', fill:'#fff', stroke:INK, 'stroke-width':2, 'stroke-linejoin':'round'}, g);
+      mk('path', {d:'M0,-36 L-9,-39 L0,-42', fill:INK}, g);
+      mk('path', {d:'M8,-14 L13,-6', stroke:INK, 'stroke-width':1.2}, g);
+    },
+    steamer: g => {
+      mk('path', {d:'M-34,0 L34,0 L26,11 L-28,11 Z', fill:INK}, g);
+      mk('rect', {x:-18, y:-10, width:30, height:10, fill:'#fff', stroke:INK, 'stroke-width':2}, g);
+      mk('path', {d:'M-12,-5 h4 M-3,-5 h4 M6,-5 h4', stroke:INK, 'stroke-width':2}, g);
+      mk('path', {d:'M-6,-10 L-6,-24 L2,-24 L2,-10 Z', fill:INK}, g);
+      mk('path', {d:'M-6,-19 H2', stroke:'#fff', 'stroke-width':1.4}, g);
+      mk('circle', {cx:-8, cy:-30, r:3.2, fill:'none', stroke:INK, 'stroke-width':1.6}, g);
+      mk('circle', {cx:-15, cy:-35, r:4.2, fill:'none', stroke:INK, 'stroke-width':1.6}, g);
+      mk('circle', {cx:-24, cy:-38, r:5, fill:'none', stroke:INK, 'stroke-width':1.6}, g);
+      mk('path', {d:'M-22,6 L20,6', stroke:'#fff', 'stroke-width':1.3, 'stroke-dasharray':'3 4'}, g);
     }
   };
 
@@ -587,10 +605,15 @@ const STOPS = [
   }
   function bubbles() { const z = zone(false); ripple(rnd(...z.x), rnd(...z.y), rnd(.6, 1)); }
 
-  // a little ship crossing the Atlantic, very slowly
-  const shipG = mk('g', {opacity:0}, svg), ship = mk('g', {}, shipG); SHAPES.ship(ship);
-  let shipT = performance.now() - rnd(0, 60000);
-  const SHIP = {x:[820, 1220], y:690, dur: 90000};
+  // little ships crossing the water, very slowly, each on its own lane
+  const SHIPS = [
+    {shape:'ship',    x:[820, 1220], y:690, dur: 90000, s:.9},
+    {shape:'ship',    x:[960, 1270], y:215, dur:120000, s:.72},
+    {shape:'sail',    x:[880, 1200], y:520, dur: 70000, s:.85},
+    {shape:'steamer', x:[745, 870],  y:595, dur: 60000, s:.65},
+    {shape:'sail',    x:[406, 454],  y:652, dur: 45000, s:.45}
+  ].map(o => { const G = mk('g', {opacity:0}, svg), b = mk('g', {}, G); SHAPES[o.shape](b);
+    return {...o, G, b, t0: performance.now() - rnd(0, o.dur * 2), ph: rnd(0, 6)}; });
 
   const SPAWN = [[fish, 42], [dolphin, 30], [whale, 12], [bubbles, 16]];
   let next = performance.now() + 1200, visible = true, raf = 0;
@@ -607,11 +630,13 @@ const STOPS = [
       if (p >= 1) { a.end(); actors.delete(a); continue; }
       a.step(p);
     }
-    let sp = ((now - shipT) % (SHIP.dur * 2)) / SHIP.dur, dir = 1;
-    if (sp > 1) { sp = 2 - sp; dir = -1; }
-    const sx = SHIP.x[0] + (SHIP.x[1] - SHIP.x[0]) * sp, bob = Math.sin(now / 900) * 1.6, roll = Math.sin(now / 1300) * 3;
-    ship.setAttribute('transform', `translate(${sx},${SHIP.y + bob}) scale(${dir * .7},.7) rotate(${roll})`);
-    shipG.setAttribute('opacity', Math.min(1, Math.min(sp, 1 - sp) * 25));
+    for (const sh of SHIPS) {
+      let sp = ((now - sh.t0) % (sh.dur * 2)) / sh.dur, dir = 1;
+      if (sp > 1) { sp = 2 - sp; dir = -1; }
+      const sx = sh.x[0] + (sh.x[1] - sh.x[0]) * sp, bob = Math.sin(now / 900 + sh.ph) * 1.6, roll = Math.sin(now / 1300 + sh.ph) * 3;
+      sh.b.setAttribute('transform', `translate(${sx},${sh.y + bob}) scale(${dir * sh.s},${sh.s}) rotate(${roll})`);
+      sh.G.setAttribute('opacity', Math.min(1, Math.min(sp, 1 - sp) * 25));
+    }
   }
   const start = () => { if (!raf && visible && !document.hidden) { next = performance.now() + 800; raf = requestAnimationFrame(frame); } };
   const stop = () => { cancelAnimationFrame(raf); raf = 0; };
