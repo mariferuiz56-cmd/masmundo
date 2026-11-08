@@ -62,6 +62,10 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
   .tl .dot{position:absolute;top:31px;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;border:2px solid var(--ink);
            transition:transform .2s, background .2s, border-color .2s;padding:0;cursor:pointer}
   .tl .dot.on{background:var(--pink);border-color:var(--pink);transform:scale(1.35)}
+  .tl .dot.home{width:26px;height:26px;margin:-15px 0 0 -4px;border:0;border-radius:0;background:none;color:var(--pink)}
+  .tl .dot.home svg{display:block;width:100%;height:100%;filter:drop-shadow(0 1px 0 #fff)}
+  .tl .dot.home.on{background:none;transform:scale(1.2)}
+  .tl .cap.l{display:none}
   .tl .lbl{position:absolute;top:0;transform:translateX(-50%);font-size:12px;font-weight:600;white-space:nowrap;opacity:0;transition:opacity .2s}
   .tl .lbl.on{opacity:1;color:var(--pink)}
   .tl .knob{position:absolute;top:31px;width:2px;height:0;pointer-events:none}
@@ -267,7 +271,7 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
    role / desc: what I did there (leave "" to hide).
    ========================================================= */
 const STOPS = [
-  { at:2009.6, when:"Where it began", place:"Ciudad Juárez · El Paso, TX", pins:[[31.69,-106.42]], tz:[-7],
+  { at:2009, when:"Where it began", place:"Ciudad Juárez · El Paso, TX", pins:[[31.69,-106.42]], tz:[-7],
     role:"Hometowns · Two Countries, One Perspective", desc:"Raised between Mexico and the United States, where two cultures, languages, and ways of seeing the world became part of my everyday life. A border upbringing that continues to shape my perspective, creative identity, and work." },
   { at:2011, end:2012, when:"2011 – 2012", place:"Florence, Italy", pins:[[43.77,11.25]], tz:[1],
     role:"Certificate in Fine Arts · Istituto Lorenzo de’ Medici", desc:"Studied Fine Arts in Florence, expanding my artistic foundation through hands-on exploration of traditional techniques, visual composition, and art history. An early chapter in developing my perspective as a multidisciplinary artist." },
@@ -305,7 +309,9 @@ const STOPS = [
     el.style.left = tx(s.at) + '%'; el.style.width = (s.end ? tx(s.end) - tx(s.at) : 0) + '%'; tl.appendChild(el); return el; });
   const dots = STOPS.map((s, i) => { const b = document.createElement('button'); b.className = 'dot'; b.type = 'button';
     b.style.left = tx(s.at) + '%'; b.setAttribute('aria-label', `${s.when}: ${s.place}`); b.tabIndex = -1;
-    b.addEventListener('click', () => set(i)); tl.appendChild(b); return b; });
+    b.addEventListener('click', () => set(i));
+    if (i === 0){ b.classList.add('home'); b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.8 11.2h3V21.5h5.4v-6h3.6v6h5.4V11.2h3Z" fill="currentColor" stroke="#231419" stroke-width="1.6" stroke-linejoin="round"/><path d="M16.6 4.2h2.6v4.4" fill="none" stroke="#231419" stroke-width="1.6"/></svg>'; }
+    tl.appendChild(b); return b; });
   const lbls = STOPS.map(s => { const el = document.createElement('div'); el.className = 'lbl';
     el.style.left = Math.min(92, Math.max(8, tx(s.at))) + '%'; el.textContent = s.place.split(' · ')[0].split(',')[0]; tl.appendChild(el); return el; });
   tl.setAttribute('aria-valuemax', STOPS.length - 1);
