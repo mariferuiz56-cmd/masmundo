@@ -18,7 +18,7 @@
 <meta name="theme-color" content="#ED55A6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script>
 /* Owner opt-out: visit ?me=1 once per browser to stop counting your own visits (?me=0 to undo). */
@@ -101,11 +101,20 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
   .route .halo.on{opacity:.9}
   .lead{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
   .lead line{stroke:var(--ink);stroke-width:2;stroke-dasharray:5 4}
-  .card{position:absolute;width:min(300px,46%);background:#fffdf8;color:var(--ink);padding:16px 18px 18px;border-radius:0;border:2.5px solid var(--ink);
-        box-shadow:inset 0 0 0 4px #fffdf8, inset 0 0 0 5.5px var(--ink), 6px 6px 0 var(--ink);transition:left .45s cubic-bezier(.3,.8,.2,1), top .45s cubic-bezier(.3,.8,.2,1), opacity .2s}
-  .card{padding-right:18px;z-index:6}
+  .card{position:absolute;width:min(480px,62%);color:var(--ink);padding:7px;border-radius:2px;border:1.5px solid var(--ink);
+        background:repeating-linear-gradient(-45deg,#ED55A6 0 9px,#fffdf8 9px 14px,#231419 14px 23px,#fffdf8 23px 28px);
+        box-shadow:5px 6px 0 var(--ink);rotate:-1deg;transition:left .45s cubic-bezier(.3,.8,.2,1), top .45s cubic-bezier(.3,.8,.2,1), opacity .2s}
+  .card{z-index:6}
+  .pc{background:#fffdf8;display:grid;grid-template-columns:1fr 128px;padding:14px 16px 16px;position:relative}
+  .pc-l{padding-right:16px;border-right:1.5px solid var(--ink);min-width:0}
+  .pc-r{padding-left:14px;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+  .pc-r .stamp{position:relative;right:auto;top:auto;width:72px}
+  .post{align-self:flex-start;display:flex;align-items:center;gap:2px;margin:-4px 0 0 -6px;transform:rotate(-12deg)}
+  .post .ring{width:58px;height:58px;border-radius:50%;border:2px solid var(--ink);box-shadow:inset 0 0 0 3px #fffdf8, inset 0 0 0 4.5px var(--ink);display:grid;place-items:center;text-align:center;font:700 7px/1.25 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+  .post svg{width:34px;height:26px}
+  .addr{width:100%;margin-top:auto;font-family:"Permanent Marker",var(--sans);font-size:13px;line-height:1;color:var(--ink)}
+  .addr span{display:block;border-bottom:1.5px solid var(--ink);padding:8px 2px 3px;white-space:nowrap;overflow:hidden}
   .lead{z-index:5}
-  .card h2{padding-right:52px}
   .stamp{position:absolute;right:-18px;top:-22px;width:78px;padding:7px;background:#fffdf8;transform:rotate(7deg);
          filter:drop-shadow(0 6px 8px rgba(60,10,35,.28));
          -webkit-mask:radial-gradient(circle,transparent 2.3px,#000 2.5px) -3.25px -3.25px/6.5px 6.5px, linear-gradient(#000 0 0) center/calc(100% - 6.5px) calc(100% - 6.5px) no-repeat;
@@ -172,7 +181,11 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
     .head p{display:none}
     .tl .yr:nth-of-type(even){display:none}
     .card{position:relative;left:auto!important;top:auto!important;width:100%;margin-top:22px}
-    .stamp{right:10px;top:-16px;width:62px}
+    .card{rotate:0deg}
+    .pc{grid-template-columns:1fr 104px;padding:12px}
+    .pc-l{padding-right:12px}
+    .pc-r{padding-left:10px}
+    .pc-r .stamp{width:60px}
     .lead{display:none}
     .credit{flex-direction:column;align-items:center;text-align:center;padding:14px 18px}
     .extras{grid-template-columns:1fr;gap:18px}
@@ -214,11 +227,19 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
       <svg class="lead" id="lead" aria-hidden="true"><line id="leadline" x1="0" y1="0" x2="0" y2="0"/></svg>
     </div>
     <div class="card" id="card" aria-live="polite">
-      <div class="stamp" id="c-stamp" aria-hidden="true"></div>
-      <div class="when" id="c-when"></div>
-      <h2 id="c-place"></h2>
-      <p class="role" id="c-role"></p>
-      <p class="desc" id="c-desc"></p>
+      <div class="pc">
+        <div class="pc-l">
+          <div class="when" id="c-when"></div>
+          <h2 id="c-place"></h2>
+          <p class="role" id="c-role"></p>
+          <p class="desc" id="c-desc"></p>
+        </div>
+        <div class="pc-r" aria-hidden="true">
+          <div class="stamp" id="c-stamp"></div>
+          <div class="post"><div class="ring" id="c-post"></div><svg viewBox="0 0 34 26" fill="none" stroke="#231419" stroke-width="1.6" stroke-linecap="round"><path d="M1 5q4-3 8 0t8 0 8 0 8 0"/><path d="M1 13q4-3 8 0t8 0 8 0 8 0"/><path d="M1 21q4-3 8 0t8 0 8 0 8 0"/></svg></div>
+          <div class="addr"><span>Marifer Ruiz</span><span>masmundo.ai</span><span>&nbsp;</span></div>
+        </div>
+      </div>
     </div>
     </div>
     <section class="extras" aria-label="Certifications, languages and contact">
@@ -393,6 +414,8 @@ const STOPS = [
   function setStamp(i){
     stampEl.innerHTML = `<div class="in"><svg viewBox="0 0 64 60" fill="none">${ICON[STAMP[i]]}</svg><b>${STAMP_LBL[i]}</b></div>`;
     stampEl.classList.remove('pop'); void stampEl.offsetWidth; stampEl.classList.add('pop');
+    const yr = (STOPS[i].when.match(/\d{4}/) || [''])[0];
+    $('c-post').innerHTML = `${STAMP_LBL[i]}<br>${yr || '★'}`;
   }
 
   let cur = -1;
