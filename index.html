@@ -222,6 +222,10 @@
   .box .meta{font-size:13px;color:var(--pink);font-weight:600;margin:0 0 8px}
   .box h3{font-weight:700;font-size:38px;line-height:1;letter-spacing:-.035em;margin:0 0 14px}
   .box p{margin:0 0 12px;color:var(--ink-soft)}
+  .plink{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font:600 14px/1 var(--sans);color:var(--ink);background:var(--lime);text-decoration:none;padding:11px 16px 11px 18px;border-radius:999px;transition:background .2s,color .2s,transform .2s}
+  .plink[hidden]{display:none}
+  .plink svg{width:14px;height:14px}
+  .plink:hover{background:var(--ink);color:#fff;transform:translateY(-1px)}
   .box .roles{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);line-height:1.6;
               border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:8px 0;margin:0 0 16px}
   .box .roles:empty{display:none}
@@ -396,6 +400,7 @@ if(!off){var s=document.createElement('script');s.defer=true;s.src='/_vercel/ins
       <h3 id="box-title"></h3>
       <p class="roles" id="box-roles"></p>
       <div id="box-desc"></div>
+      <a class="plink" id="box-link" target="_blank" rel="noopener" hidden></a>
     </div>
   </div>
 </div>
@@ -421,6 +426,7 @@ const PROJECTS = [
     desc:"A character-led visual world developed for SaladPower, featuring a protagonist made entirely of spinach. Through cinematic scenes of movement, performance, and everyday rituals, Spinach Man transforms a simple product benefit into a recognizable personality and an evolving brand story." },
   { title:"Easy Love for Isadora", label:"Easy Love", kind:"Music Artwork · Creative Direction", year:"",
     img:"work/easy-love/cover.webp", thumb:"work/easy-love/thumb.webp",
+    link:{ url:"https://open.spotify.com/album/3XLOBz1zhjbYgY5HQgQXum?si=foeYvz7YRQmTNkwl43rW8g", label:"Listen on Spotify" },
     images:["work/easy-love/mangoes.webp","work/easy-love/portraits.webp"], colors:["#2E6BC6","#C9B23C","#F28A2E"],
     roles:"Creative Direction · Art Direction · Cover Art · Visual Identity",
     desc:"A visual identity developed for Isadora's debut single, Easy Love. Through soft, nostalgic imagery and understated art direction, the artwork translates the intimacy of the song into a timeless visual expression." },
@@ -739,6 +745,9 @@ const PROJECTS = [
     $('box-title').textContent = numTitle(p);
     $('box-roles').textContent = '';
     $('box-desc').innerHTML = (p.long || [p.desc]).map(t => `<p>${t}</p>`).join('');
+    const bl = $('box-link');
+    if (p.link){ bl.href = p.link.url; bl.innerHTML = `${p.link.label} <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg>`; bl.hidden = false; }
+    else { bl.hidden = true; bl.removeAttribute('href'); }
     const pic = document.querySelector('.box .pic');
     pic.style.aspectRatio = p.ratio || '1/1';
     pic.classList.toggle('contain', p.fit === 'contain');
